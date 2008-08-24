@@ -1,0 +1,26 @@
+#labels bindings
+#Language Bindings for Chipmunk.
+
+=List of Bindings:=
+
+I don't maintain any of these projects other than the Ruby bindings, so I take no responsibility for the status of their projects.
+
+ * Ruby - Included with the Chipmunk source, I use and maintain this one myself.
+  * Also available as a module for [http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration Gosu], which was featured in an [http://www.oreillynet.com/pub/a/ruby/2007/12/18/creating-games-in-ruby-part-2.html O'Reilly article].
+ * [http://code.google.com/p/pymunk/ Pymunk] A Python binding.
+ * [http://www.linux-nantes.org/~fmonnier/OCaml/Chipmunk/ OCaml-Chipmunk]
+ * [http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Hipmunk-0.2 Hipmunk] A Haskell binding.
+ * [http://code.google.com/p/chipmunk-java/ Chipmunk-Java]
+ * [http://code.google.com/p/maxmods/wiki/ChipmunkModule BlitzMax]
+ * [http://www.slembcke.net/forums/viewtopic.php?f=6&t=231&p=1047&hilit=wrapper#p1047 C++ wrapper]
+
+I know people have also used it from Lua and Multimedia Fusion, although Google seems to be of little help.
+
+If you've written a binding that's not on this list, send me an email.
+
+=Ports:=
+
+While Chipmunk itself borrowed the solver from [http://www.box2d.org/ Box2D] back when it was but a wee demo and replaced the collision detection added other features, so have other people done the same with Chipmunk.
+
+ * [http://code.google.com/p/glaze/ Glaze] - Chipmunk ported to the Flash AVM2.
+ * [http://www.dsource.org/projects/blaze Blaze] - D based 
