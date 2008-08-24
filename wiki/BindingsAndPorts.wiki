@@ -1,6 +1,4 @@
 #labels bindings
-#Language Bindings for Chipmunk.
-
 =List of Bindings:=
 
 I don't maintain any of these projects other than the Ruby bindings, so I take no responsibility for the status of their projects.
@@ -13,8 +11,9 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
  * [http://code.google.com/p/chipmunk-java/ Chipmunk-Java]
  * [http://code.google.com/p/maxmods/wiki/ChipmunkModule BlitzMax]
  * [http://www.slembcke.net/forums/viewtopic.php?f=6&t=231&p=1047&hilit=wrapper#p1047 C++ wrapper]
+ * [http://www.phizix.tk/ Phizix] Multimedia Fusion extention. (look under the extentions link)
 
-I know people have also used it from Lua and Multimedia Fusion, although Google seems to be of little help.
+I know people have also used it from Lua as well, although Google seems to be of little help.
 
 If you've written a binding that's not on this list, send me an email.
 
