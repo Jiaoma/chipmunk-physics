@@ -1,0 +1,20 @@
+Chipmunk has been used in quite a few commercial and non-commercial games released on a number of platforms.
+
+==PC/Mac/Linux==
+
+ * [http://howlingmoonsoftware.com/scribball.shtml ScribBall] - A physics twist on the old color matching genre. Made by a friend and myself. (Mac only)
+ * [http://www.batteryacid.org/biofilm/ Biofilm] - RTS based around bacteria. (Mac only)
+ * [http://ec.silverspherestudios.com/ Eternity's Child] - Platformer with comic book inspired graphics. With a WiiWare port of the game, it's possible Chipmunk has made it's way onto consoles! (PC only)
+ * [http://xmoto.tuxfamily.org/ XMoto] - While originally based around ODE, the next version will use Chipmunk to simulate boxes and other items to interact with. (PC/Mac/Linux)
+ * [http://nuclearnova.com/liquiddefense.php Liquid Defense] - Somewhat similar to Enigmo or Incredible Machine. (Mac only)
+
+==PSP==
+ * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker]
+ * [http://beyondds.free.fr/index.php?2008/07/07/70-antitetris-10 Anti-Tetris] A comical (IMO) twist on Tetris. I'd love to see the surprise on a hardened Tetris veteran's face when handed that game. :D
+
+==iPhone==
+
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=285947378&mt=8 Hangman Sim] - Simple Hangman game with an interactive hangman doll.
+ * [http://howlingmoonsoftware.com/scribball.shtml ScribBall] - Not finished quite yet, but coming soon. 
+
+If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list.
