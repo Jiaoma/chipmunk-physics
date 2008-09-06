@@ -1,0 +1,112 @@
+=Chipmunk Vectors `cpVect`=
+
+{{{
+typedef struct cpVect{
+	cpFloat x,y;
+} cpVect
+}}}
+
+ Simply a 2D vector packed into a struct. May change in the future to take advantage of SIMD.
+
+{{{
+#define cpvzero ((cpVect){0.0f, 0.0f})
+}}}
+
+ Constant for the zero vector.
+
+{{{
+cpVect cpv(const cpFloat x, const cpFloat y)
+}}}
+
+ Convenience constructor for creating new `cpVect` structs.
+
+{{{
+cpVect cpvadd(const cpVect v1, const cpVect v2)
+cpVect cpvsub(const cpVect v1, const cpVect v2)
+}}}
+
+ Add or subtract two vectors.
+
+{{{
+cpVect cpvneg(const cpVect v)
+}}}
+
+ Negate a vector.
+
+{{{
+cpVect cpvmult(const cpVect v, const cpFloat s)
+}}}
+
+ Scalar multiplication.
+
+{{{
+cpFloat cpvdot(const cpVect v1, const cpVect v2)
+}}}
+
+ Vector dot product.
+
+{{{
+cpFloat cpvcross(const cpVect v1, const cpVect v2)
+}}}
+
+ 2D vector cross product analog. The cross product of 2D vectors results in a 3D vector with only a z component. This function returns the magnitude of the z value.
+
+{{{
+cpVect cpvperp(const cpVect v)
+}}}
+
+ Returns the perpendicular vector. (90 degree rotation)
+
+{{{
+cpVect cpvproject(const cpVect v1, const cpVect v2)
+}}}
+
+ Returns the vector projection of `v1` onto `v2`.
+
+{{{
+cpVect cpvrotate(const cpVect v1, const cpVect v2)
+}}}
+
+ Uses complex multiplication to rotate `v1` by `v2`. Scaling will occur if `v1` is not a unit vector.
+
+{{{
+cpVect cpvunrotate(const cpVect v1, const cpVect v2)
+}}}
+
+ Inverse of `cpvrotate()`.
+
+{{{
+cpFloat cpvlength(const cpVect v)
+}}}
+
+ Returns the length of `v`.
+
+{{{
+cpFloat cpvlengthsq(const cpVect v)
+}}}
+
+ Returns the squared length of `v`. Faster than `cpvlength()` when you only need to compare lengths.
+
+{{{
+cpVect cpvnormalize(const cpVect v)
+}}}
+
+ Returns a normalized copy of `v`.
+
+{{{
+cpVect cpvforangle(const cpFloat a)
+}}}
+
+ Returns the unit length vector for the given angle (in radians).
+
+{{{
+cpFloat cpvtoangle(const cpVect v)
+}}}
+
+ Returns the angular direction `v` is pointing in (in radians).
+
+{{{
+*cpvstr(const cpVect v)
+}}}
+
+Returns a string representation of `v`. Intended mostly for debugging purposes and not production use. *NOTE:* _The string points to a static local and is reset every time the function is called. If you want to print more than one vector you will have to split up your printing onto separate lines._
