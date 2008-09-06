@@ -109,4 +109,4 @@ cpFloat cpvtoangle(const cpVect v)
 *cpvstr(const cpVect v)
 }}}
 
-Returns a string representation of `v`. Intended mostly for debugging purposes and not production use. *NOTE:* _The string points to a static local and is reset every time the function is called. If you want to print more than one vector you will have to split up your printing onto separate lines._
+ Returns a string representation of `v`. Intended mostly for debugging purposes and not production use. *NOTE:* _The string points to a static local and is reset every time the function is called. If you want to print more than one vector you will have to split up your printing onto separate lines._
