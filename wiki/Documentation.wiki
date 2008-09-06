@@ -1,11 +1,12 @@
 #labels Documentation
-*THIS PAGE IS UNFINISHED* In the mean time, use the [http://files.slembcke.net/chipmunk/chipmunk-docs.html old documentation page].
+*THIS DOCUMENTATION IS CURRENTLY IN PROGRESS* In the mean time, use the [http://files.slembcke.net/chipmunk/chipmunk-docs.html old documentation page].
 
 =Introduction=
 
 First of all, Chipmunk is a 2D rigid body physics library distributed under the MIT license. Though not yet complete, it is intended to be fast, numerically stable, and easy to use.
 
 It’s been a long time in coming, but I’ve finally made a stable and usable physics implementation. While not feature complete yet, it’s well on it’s way. I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver come from his Box2D example code. (No a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Couldn’t have gotten that working without his help.
+
 
 =Overview=
 
@@ -16,6 +17,54 @@ It’s been a long time in coming, but I’ve finally made a stable and usable p
 
 ==Rigid bodies, collision shapes and sprites:==
 
-There is often confusion between rigid bodies and their collision shapes in Chipmunk and how they relate to sprites. A sprite would be a visual representation of an object, the sprite is drawn at the position of the rigid body. The collision shape would be the material representation of the object, and how it should collide with other objects. A sprite and collision shape have little to do with one another other than you probably want the collision shape to match the sprite’s shape.
+There is often confusion between rigid bodies and their collision shapes in Chipmunk and how they relate to sprites. A sprite would be a visual representation of an object, the sprite is drawn at the position and rotation of the rigid body. Collision shapes representation of the object, and how it should collide with other objects. A sprite and collision shape have little to do with one another other than you probably want the collision shape to match the sprite’s shape.
 
-_more to come_
+
+=Chipmunk Basics=
+
+==Initialization==
+
+Before you do anything else, you *must* initialize Chipmunk.
+
+{{{
+cpInitChipmunk(); // That is all
+}}}
+
+If you find this annoying, worry not as it's likely to go away in the future.
+
+==Memory Management the Chipmunk way==
+
+For many of the structures you will use, Chipmunk uses a more or less standard set of memory management functions. For example:
+
+ * `cpSpaceAlloc()` allocates but does not initialize a [cpSpace] struct.
+ * `cpSpaceInit(cpSpace *space)` initializes a [cpSpace] struct.
+ * `cpSpaceDestroy(cpSpace *space)` frees all memory allocated by the `cpSpaceInit()`, but does not free the [cpSpace] struct itself.
+ * `cpSpaceNew()` allocates and initializes a [cpSpace] struct (calls `cpSpaceAlloc ()` and `cpSpaceInit()`).
+ * `cpSpaceFree(cpSpace *space)` calls `cpSpaceDestroy()` and then frees the [cpSpace] struct.
+
+While you will probably use the new/free versions exclusively if you are using C/C++, but the alloc/init/destroy functions can be helpful when writing language extensions so that you can more easily work with a garbage collector.
+
+In general, you are responsible for freeing any structs that you allocate. Chipmunk does not have any fancy reference counting or garbage collection.
+
+
+==Math the Chipmunk way==
+
+First of all, Chipmunk uses double precision floating point numbers throughout it's calculations by default. This is likely to be faster on most modern desktop processors, and means you have to worry less about floating point round off errors. You can change the floating point type used by Chipmunk when compiling the library. Look in chipmunk.h.
+
+To represent vectors, Chipmunk defines the [cpVect] type and a set of inline functions for working with them (cpv, cpvadd, cpvmult, etc). See the API reference for more information..
+
+
+=Chipmunk C API=
+
+==Main API==
+
+ * [cpVect] - Create and manipulate 2D vectors.
+ * [cpBB] - Create and manipulate 2D axis-aligned bounding boxes.
+ * [cpBody] - Create and work with rigid bodies.
+ * [cpSpace] -  Create a "space" to put your objects into and simulate them.
+ * [cpJoint] - Create joints.
+
+==Miscellaneous==
+
+ * [cpArbiter] - Mostly used internally by the impulse solver, but it has uses in collision pair functions.
+ * [cpSpaceHash] - Spatial hash implementation used by Chipmunk. You can use them for your non-physics based collision detection as well.
