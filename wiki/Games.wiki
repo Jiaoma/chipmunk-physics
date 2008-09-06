@@ -7,6 +7,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://ec.silverspherestudios.com/ Eternity's Child] - Platformer with comic book inspired graphics. With a WiiWare port of the game, it's possible Chipmunk has made it's way onto consoles! (PC only)
  * [http://xmoto.tuxfamily.org/ XMoto] - While originally based around ODE, the next version will use Chipmunk to simulate boxes and other items to interact with. (PC/Mac/Linux)
  * [http://nuclearnova.com/liquiddefense.php Liquid Defense] - Somewhat similar to Enigmo or Incredible Machine. (Mac only)
+ * [http://www.zanydoodle.com/ Zany Doodle] - A physics sandbox game similar to Crayon Physics. [http://www.youtube.com/results?search_query=zany+doodle&search_type=&aq=f YouTube videos]
 
 ==PSP==
  * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker]
