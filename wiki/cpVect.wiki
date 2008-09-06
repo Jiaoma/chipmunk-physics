@@ -1,5 +1,6 @@
 =Chipmunk Vectors `cpVect`=
 
+==Struct Definition, Constants and Constructors==
 {{{
 typedef struct cpVect{
 	cpFloat x,y;
@@ -19,6 +20,8 @@ cpVect cpv(const cpFloat x, const cpFloat y)
 }}}
 
  Convenience constructor for creating new `cpVect` structs.
+
+==Operations==
 
 {{{
 cpVect cpvadd(const cpVect v1, const cpVect v2)
