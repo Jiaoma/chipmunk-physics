@@ -1,5 +1,6 @@
 =Chipmunk bounding boxes: `cpBB`=
 
+==Struct Definition and Constructors==
 {{{
 typedef struct cpBB{
 	cpFloat l, b, r ,t;
@@ -13,6 +14,8 @@ cpBB cpBBNew(const cpFloat l, const cpFloat b, const cpFloat r, const cpFloat t)
 }}}
 
  Convenience constructor for `cpBB` structs. Like `cpv()` this function returns a copy and not a malloced pointer.
+
+==Operations==
 
 {{{
 int cpBBintersects(const cpBB a, const cpBB b)
