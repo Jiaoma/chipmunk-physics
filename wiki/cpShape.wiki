@@ -8,7 +8,7 @@ There are currently 3 possible collision shapes:
  * *Line segments*: Meant mainly as a static shape. They can be attached to moving bodies, but they don't currently generate collisions with other line segments. Can be beveled in order to give them a thickness.
  * *Convex polygons*: Slowest, but most flexible collision shape.
 
-It's important to know that collision shapes are meant to be immutable and opaque. While you _can_ cast a `cpShape` pointer to a more specific shape type to read and write from it, you really shouldn't. If you read to read these values later, you should store them in your struct and reference it through the `data` field. In the future, the struct definitions will probably be moved to a private header.
+It's important to know that collision shapes are meant to be immutable and opaque. While you _can_ cast a `cpShape` pointer to a more specific shape type (not discussed here) to read and write from it, you really shouldn't. If you read to read these values later, you should store them in your struct and reference it through the `data` field. In the future, the struct definitions will probably be moved to a private header.
 
 ==Type Definitions and Memory Management Functions:==
 
