@@ -1,0 +1,66 @@
+=Chipmunk joints: `cpJoint`=
+
+==Joint Types:==
+
+There are currently 4 kinds of joints:
+
+ * *Pin Joints* connect two rigid bodies with a solid pin or rod. It keeps the anchor points at a set distance from one another.
+ * *Slide Joints* are like pin joints, but have a minimum and maximum distance. A chain could be modeled using this joint. It keeps the anchor points from getting to far apart, but will allow them to get closer together.
+ * *Pivot Joints* simply allow two objects to pivot about a single point.
+ * *Groove Joints* attach a point on one body to a groove on the other. Think of it as a sliding pivot joint.
+
+==Shared Memory ManagementFunctions:==
+
+{{{
+void cpJointDestroy(cpJoint *joint)
+void cpJointFree(cpJoint *joint)
+}}}
+
+ `Destroy` and `Free` functions are shared by all joint types. Allocation and initialization functions are specific to each joint type.
+ 
+=Joint Constructors:=
+
+==Pin Joints:==
+
+{{{
+cpPinJoint *cpPinJointAlloc(void)
+cpPinJoint *cpPinJointInit(cpPinJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+cpJoint *cpPinJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+}}}
+
+ `a` and `b` are the two bodies to connect, and `anchr1` and `anchr2` are the anchor points on those bodies.
+
+==Slide Joints:==
+
+{{{
+cpSlideJoint *cpSlideJointAlloc(void)
+cpSlideJoint *cpSlideJointInit(cpSlideJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
+cpJoint *cpSlideJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
+}}}
+
+ `a` and `b` are the two bodies to connect, `anchr1` and `anchr2` are the anchor points on those bodies, and `min` and `max` define the allowed distances of the anchor points.
+
+==Pivot Joints:==
+
+{{{
+cpPivotJoint *cpPivotJointAlloc(void)
+cpPivotJoint *cpPivotJointInit(cpPivotJoint *joint, cpBody *a, cpBody *b, cpVect pivot)
+cpJoint *cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot)
+}}}
+
+ `a` and `b` are the two bodies to connect, and `pivot` is the point in world coordinates of the pivot. Because the pivot location is given in world coordinates, you must have the bodies moved into the correct positions already.
+
+==Groove Joint:==
+
+{{{
+cpGrooveJoint *cpGrooveJointAlloc(void)
+cpGrooveJoint *cpGrooveJointInit(cpGrooveJoint *joint, cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
+cpJoint *cpGrooveJointNew(cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
+}}}
+
+ The groove goes from _groov_a_ to _groove_b_ on body _a_, and the pivot is attached to _anchr2_ on body _b_. All coordinates are body local.
+
+=Notes:=
+
+ * You can add multiple joints between two bodies, but make sure that they don't fight. It can cause the bodies to explode.
+ * Make sure you add both of the connected bodies and the joint to a space.
