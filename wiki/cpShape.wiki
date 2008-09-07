@@ -1,0 +1,125 @@
+=Chipmunk collision shapes: `cpShape`=
+
+==Collision Shape Types:==
+
+There are currently 3 possible collision shapes:
+
+ * *Circles*: Fastest and simplest collision shape.
+ * *Line segments*: Meant mainly as a static shape. They can be attached to moving bodies, but they don't currently generate collisions with other line segments. Can be beveled in order to give them a thickness.
+ * *Convex polygons*: Slowest, but most flexible collision shape.
+
+It's important to know that collision shapes are meant to be immutable and opaque. While you _can_ cast a `cpShape` pointer to a more specific shape type to read and write from it, you really shouldn't. If you read to read these values later, you should store them in your struct and reference it through the `data` field. In the future, the struct definitions will probably be moved to a private header.
+
+==Type Definitions and Memory Management Functions:==
+
+Here is the base cpShape struct definition from cpShape.h.
+
+{{{
+// Basic shape struct that the others inherit from.
+typedef struct cpShape{
+	// The "class" of a shape as defined above 
+	const cpShapeClass *klass;
+	
+	// cpBody that the shape is attached to.
+	cpBody *body;
+
+	// Cached BBox for the shape.
+	cpBB bb;
+	
+	// *** Surface properties.
+	
+	// Coefficient of restitution. (elasticity)
+	cpFloat e;
+	// Coefficient of friction.
+	cpFloat u;
+	// Surface velocity used when solving for friction.
+	cpVect surface_v;
+
+	// *** User Definable Fields
+
+	// User defined data pointer for the shape.
+	void *data;
+	
+	// User defined collision type for the shape.
+	unsigned int collision_type;
+	// User defined collision group for the shape.
+	unsigned int group;
+	// User defined layer bitmask for the shape.
+	unsigned int layers;
+	
+	// *** Internally Used Fields
+	
+	// Unique id used as the hash value.
+	unsigned int id;
+} cpShape;
+}}}
+
+ * `bb`: The bounding box of the shape. Only guaranteed to be valid after `cpShapeCacheBB()` or `cpSpaceStep()` is called.
+ * `collision_type`: A user definable field, see the collision pair function section below for more information.
+ * `group`: Shapes in the same non-zero group do not generate collisions. Useful when creating an object out of many shapes that you don't want to self collide. Defaults to `0`;
+ * `layers`: Shapes only collide if they are in the same bit-planes. i.e. `(a->layers & b->layers) != 0` By default, a shape occupies all 32 bit-planes.
+ * `data`: A user definable field.
+ * `body`: The rigid body the shape is attached to.
+ * `e`: Elasticity of the shape. A value of 0.0 gives no bounce, while a value of 1.0 will give a "perfect" bounce. However due to inaccuracies in the simulation using 1.0 or greater is not recommended however. _See the notes at the end of the section._
+ * `u`: Friction coefficient. Chipmunk uses the Coulomb friction model, a value of 0.0 is frictionless. [http://www.roymech.co.uk/Useful_Tables/Tribology/co_of_frict.htm Tables of friction coefficients]. _See the notes at the end of the section._
+ * `surface_v`: The surface velocity of the object. Useful for creating conveyor belts or players that move around. This value is only used when calculating friction, not resolving the collision.
+
+{{{
+void cpShapeDestroy(cpShape *shape)
+void cpShapeFree(cpShape *shape)
+}}}
+
+ `Destroy` and `Free` functions are shared by all shape types. Allocation and initialization functions are specific to each shape type.
+
+==Shape Operations:==
+
+{{{
+cpBB cpShapeCacheBB(cpShape *shape)
+}}}
+
+ Updates and returns the bounding box of `shape`.
+
+{{{
+void cpResetShapeIdCounter(void)
+}}}
+
+ Chipmunk keeps a counter so that every new shape is given a unique hash value to be used in the spatial hash. Because this affects the order in which the collisions are found and handled, you should reset the shape counter every time you populate a space with new shapes. If you don't, there might be (very) slight differences in the simulation.
+
+=cpShape Constructors:=
+
+==Constructing Circle Shapes:==
+
+{{{
+cpCircleShape *cpCircleShapeAlloc(void)
+cpCircleShape *cpCircleShapeInit(cpCircleShape *circle, cpBody *body, cpVect offset, cpFloat radius)
+cpShape *cpCircleShapeNew(cpBody *body, cpFloat radius, cpVect offset)
+}}}
+
+ `body` is the body to attach the circle to, `offset` is the offset from the body's center of gravity in body local coordinates. 
+
+==Constructing Segment Shapes:==
+
+{{{
+cpSegmentShape* cpSegmentShapeAlloc(void)
+cpSegmentShape* cpSegmentShapeInit(cpSegmentShape *seg, cpBody *body, cpVect a, cpVect b, cpFloat radius)
+cpShape* cpSegmentShapeNew(cpBody *body, cpVect a, cpVect b, cpFloat radius)
+}}}
+
+ `body` is the body to attach the segment to, `a` and `b` are the endpoints, and `radius` is the thickness of the segment.
+
+==Constructing Polygon Shapes:==
+
+{{{
+cpPolyShape *cpPolyShapeAlloc(void)
+cpPolyShape *cpPolyShapeInit(cpPolyShape *poly, cpBody *body, int numVerts, cpVect *verts, cpVect offset)
+cpShape *cpPolyShapeNew(cpBody *body, int numVerts, cpVect *verts, cpVect offset)
+}}}
+
+ `body` is the body to attach the poly to, `verts` is an array of `cpVect`'s defining a convex hull with a clockwise winding, `offset` is the offset from the body's center of gravity in body local coordinates.
+
+=Notes:= 
+
+ * You can attach multiple collision shapes to a rigid body. This should allow you to create almost any shape you could possibly need.
+ * Shapes attached to the same rigid body will never generate collisions. You don't have to worry about overlap when attaching multiple shapes to a rigid body.
+ * The amount of elasticity applied during a collision is determined by multiplying the elasticity of both shapes together. The same is done for determining the friction.
+ * Make sure you add both the body and it's collision shapes to a space. The exception is when you want to have a static body or a body that you integrate yourself. In that case, only add the shape.
