@@ -1,0 +1,106 @@
+=Chipmunk spaces: `cpSpace`=
+
+Spaces in Chipmunk are the basic unit of simulation. You add rigid bodies, shapes and joints to it and then step them all forward together through time.
+
+==Static Shapes:==
+
+Static shapes? Chipmunk optimizes collision detection against shapes that do not move. These unmoving, or static shapes, are designated as such by the way they are added to the space. A normal shape is added by using `cpSpaceAddShape()` while a static shape is added using `cpSpaceAddStaticShape()`.
+
+In order to create a static shape, you need to create a cpBody with an infinite mass and moment of inertia to attach the shape to. If you don't don't use an infinite mass the body will gain velocity from colliding with other objects. This will cause it to behave strangely when colliding with other objects. You also don't want to add such a body to a space as it will gain velocity from gravity. 
+
+If you do move a body that a static shape is attached to, you *must* let Chipmunk know about it by calling `cpSpaceRehashStatic()`. If you don't, the precalculated collision detection data cached by the space will not get updated and collisions will be missed.
+
+==Type Definitions and Memory Management Functions:==
+
+{{{
+typedef struct cpSpace{
+	// *** User definable fields
+	
+	// Number of iterations to use in the impulse solver to solve contacts.
+	int iterations;
+	
+	// Number of iterations to use in the impulse solver to solve elastic collisions.
+	int elasticIterations;
+	
+	// Default gravity to supply when integrating rigid body motions.
+	cpVect gravity;
+	
+	// Default damping to supply when integrating rigid body motions.
+	cpFloat damping;
+	
+	// *** Internally Used Fields
+	// cpSpace contains many internally used fields that you probably could care less about.
+} cpSpace;
+}}}
+
+ * `iterations` and `elasticIterations` allow you to control the accuracy of the solver. See the note below.
+ * `gravity` is the value passed to each body's velocity integration function when it's integrated in the space.
+ * `damping` is used in a calculation before passing it on to the velocity integration function like `gravity` is. The calculation currently applied ensures stability with variable sized time steps, but the implementation has issues and may be changed in the future.
+
+{{{
+cpSpace* cpSpaceAlloc(void)
+cpSpace* cpSpaceInit(cpSpace *space, int iterations)
+cpSpace* cpSpaceNew(int iterations)
+
+void cpSpaceDestroy(cpSpace *space)
+void cpSpaceFree(cpSpace *space)
+}}}
+
+ More standard Chipmunk memory functions.
+
+{{{
+void cpSpaceFreeChildren(cpSpace *space)
+}}}
+
+ This function will free all of the shapes, bodies and joints that have been added to `space`. Does not free `space`. You will still need to call `cpSpaceFree()` on your own.
+
+==Operations:==
+
+{{{
+void cpSpaceAddShape(cpSpace *space, cpShape *shape)
+void cpSpaceAddStaticShape(cpSpace *space, cpShape *shape)
+void cpSpaceAddBody(cpSpace *space, cpBody *body)
+void cpSpaceAddJoint(cpSpace *space, cpJoint *joint)
+
+void cpSpaceRemoveShape(cpSpace *space, cpShape *shape)
+void cpSpaceRemoveStaticShape(cpSpace *space, cpShape *shape)
+void cpSpaceRemoveBody(cpSpace *space, cpBody *body)
+void cpSpaceRemoveJoint(cpSpace *space, cpJoint *joint)
+}}}
+
+ These functions add and remove shapes, bodies and joints from `space`. Shapes added as static are assumed not to move. Static shapes should be be attached to a rigid body with an infinite mass and moment of inertia. Also, don't add the rigid body used to the space, as that will cause it to fall under the effects of gravity.
+
+==Spatial Hash Management Functions:==
+
+Chipmunk uses a spatial hash to accelerate it's collision detection. While it's not necessary to interact with the hash directly. The current API does expose some of this at the space level to allow you to tune it.
+
+{{{
+void cpSpaceResizeStaticHash(cpSpace *space, cpFloat dim, int count)
+void cpSpaceResizeActiveHash(cpSpace *space, cpFloat dim, int count)
+}}}
+
+ The spatial hashes used by Chipmunk's collision detection are fairly size sensitive. `dim` is the size of the hash cells. Setting `dim` to half the average collision shape size is likely to give the best performance. Setting 'dim' too small will cause the shape to be inserted into many cells, setting it too low will cause too many objects into the same slot.
+
+ `count` is the _suggested_ minimum number of cells in the hash table. If there are too few cells, the spatial hash will return many false positives. Too many cells will be hard on the cache and waste memory. the  Setting `count` to ~10x the number of objects in the space is probably a good starting point. Tune from there if necessary.
+
+ By default, `dim` is 100.0, and `count` is 1000.
+
+{{{
+void cpSpaceRehashStatic(cpSpace *space)
+}}}
+
+ Rehashes the shapes in the static spatial hash. You only need to call this if you move a static shapes.
+
+==Simulating the Space:==
+
+{{{
+void cpSpaceStep(cpSpace *space, cpFloat dt)
+}}}
+
+ Update the space for the given time step. Using a fixed time step is _highly_ recommended. Doing so will increase the efficiency of the contact persistence, requiring an order of magnitude fewer iterations to resolve the collisions in the usual case.
+
+=Notes:=
+
+ * When removing objects from the space, make sure you remove any other objects that reference it. For instance, when you remove a body, remove the joints and shapes attached to it.
+ * The number of iterations, and the size of the time step determine the quality of the simulation. More iterations, or smaller time steps increase the quality.
+ * Because static shapes are only rehashed when you request it, it's possible to use a much higher `count` argument to `cpHashResizeStaticHash()` than to `cpHashResizeStaticHash()`. Doing so will use more memory though.
