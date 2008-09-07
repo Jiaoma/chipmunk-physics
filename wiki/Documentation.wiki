@@ -5,7 +5,7 @@
 
 First of all, Chipmunk is a 2D rigid body physics library distributed under the MIT license. Though not yet complete, it is intended to be fast, numerically stable, and easy to use.
 
-It’s been a long time in coming, but I’ve finally made a stable and usable physics implementation. While not feature complete yet, it’s well on it’s way. I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver come from his Box2D example code. (No a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Couldn’t have gotten that working without his help.
+It’s been a long time in coming, but I’ve finally made a stable and usable physics implementation. While not feature complete yet, it’s well on it’s way. I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver come from his Box2D example code. (Now a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Couldn’t have gotten that working without his help.
 
 
 =Overview=
