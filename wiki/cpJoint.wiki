@@ -9,7 +9,7 @@ There are currently 4 kinds of joints:
  * *Pivot Joints* simply allow two objects to pivot about a single point.
  * *Groove Joints* attach a point on one body to a groove on the other. Think of it as a sliding pivot joint.
 
-==Shared Memory ManagementFunctions:==
+==Shared Memory Management Functions:==
 
 {{{
 void cpJointDestroy(cpJoint *joint)
