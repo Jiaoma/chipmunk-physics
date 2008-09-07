@@ -61,6 +61,7 @@ To represent vectors, Chipmunk defines the [cpVect] type and a set of inline fun
  * [cpVect] - Create and manipulate 2D vectors.
  * [cpBB] - Create and manipulate 2D axis-aligned bounding boxes.
  * [cpBody] - Create and work with rigid bodies.
+ * [cpShape] - Attach collision shapes to rigid bodies.
  * [cpSpace] -  Create a "space" to put your objects into and simulate them.
  * [cpJoint] - Create joints.
 
