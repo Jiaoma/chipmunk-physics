@@ -10,7 +10,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.zanydoodle.com/ Zany Doodle] - A physics sandbox game similar to Crayon Physics. [http://www.youtube.com/results?search_query=zany+doodle&search_type=&aq=f YouTube videos]
 
 ==PSP==
- * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker]
+ * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker] - Make towers and then knock them over for points.
  * [http://beyondds.free.fr/index.php?2008/07/07/70-antitetris-10 Anti-Tetris] A comical (IMO) twist on Tetris. I'd love to see the surprise on a hardened Tetris veteran's face when handed that game. :D
 
 ==iPhone==
