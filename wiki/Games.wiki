@@ -19,6 +19,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=285947378&mt=8 Hangman Sim] - Simple Hangman game with an interactive hangman doll.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=290661843&mt=8 Athletics] - Simple racing game.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=289771175&mt=8 iSplume] - Snood clone with physics.
- * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=288297101&mt=8 Micro Labyrinth] - Simple Labyrinth game. 
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=288297101&mt=8 Micro Labyrinth] - Simple Labyrinth game.
+ * [http://weelittlegamer.com/ WeeLittleGamer.com] Has a number of simple games designed for younger audiences. Chipmunk is used in several of them.
 
 If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list.
