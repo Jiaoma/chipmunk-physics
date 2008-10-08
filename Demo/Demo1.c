@@ -24,14 +24,11 @@
 #include <math.h>
 
 #include "chipmunk.h"
-#include "drawSpace.h"
-#include "ChipmunkDemo.h"
 
-cpSpace *space;
-cpBody *staticBody;
+extern cpSpace *space;
+extern cpBody *staticBody;
 
-static void
-updateFunc(int ticks)
+void demo1_update(int ticks)
 {
 	int steps = 2;
 	cpFloat dt = 1.0/60.0/(cpFloat)steps;
@@ -46,8 +43,8 @@ int some_value = 42;
 static int
 collFunc(cpShape *a, cpShape *b, cpContact *contacts, int numContacts, cpFloat normal_coef, void *data)
 {
-//	int *some_ptr = (int *)data;
-//
+	int *some_ptr = (int *)data;
+
 // Do various things with the contact information. 
 // Make particle effects, estimate the impact damage from the relative velocities, etc.
 //	for(int i=0; i<numContacts; i++)
@@ -57,8 +54,7 @@ collFunc(cpShape *a, cpShape *b, cpContact *contacts, int numContacts, cpFloat n
 	return 1;
 }
 
-static cpSpace *
-initFunc(void)
+void demo1_init(void)
 {
 	// Initialize a static body with infinite mass and moment of inertia
 	// to attach the static geometry to.
@@ -125,23 +121,4 @@ initFunc(void)
 	
 	// Add a collision callback between objects of the default type and the box.
 	cpSpaceAddCollisionPairFunc(space, 1, 0, &collFunc, &some_value);
-	
-	return space;
 }
-
-static void
-destroyFunc(void)
-{
-	cpSpaceFreeChildren(space);
-	cpSpaceFree(space);
-	
-	cpBodyFree(staticBody);
-}
-
-const chipmunkDemo Demo1 = {
-	"Tumble",
-	NULL,
-	initFunc,
-	updateFunc,
-	destroyFunc,
-};

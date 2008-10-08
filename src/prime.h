@@ -55,7 +55,7 @@ static int primes[] = {
 	0,
 };
 
-static inline int
+static int
 next_prime(int n)
 {
 	int i = 0;
