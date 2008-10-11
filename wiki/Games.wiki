@@ -22,5 +22,6 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=289771175&mt=8 iSplume] - Snood clone with physics.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=288297101&mt=8 Micro Labyrinth] - Simple Labyrinth game.
  * [http://weelittlegamer.com/ WeeLittleGamer.com] Has a number of simple games designed for younger audiences. Chipmunk is used in several of them.
+ * [http://www.chaoticbox.com/pinch_n_pop.php Pinch 'n Pop] Looks very well polished, but is hard to describe the gameplay in words. You must check out the gameplay video!
 
 If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list.
