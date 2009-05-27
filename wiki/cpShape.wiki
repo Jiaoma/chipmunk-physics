@@ -12,9 +12,13 @@ It's important to know that collision shapes are meant to be immutable and opaqu
 
 ==Type Definitions and Memory Management Functions:==
 
-Here is the base cpShape struct definition from cpShape.h.
+Here is the base cpShape struct definition and related types from cpShape.h.
 
 {{{
+typedef unsigned int cpCollisionType;
+typedef unsigned int cpLayers;
+typedef unsigned int cpGroup;
+
 // Basic shape struct that the others inherit from.
 typedef struct cpShape{
 	// The "class" of a shape as defined above 
@@ -41,11 +45,11 @@ typedef struct cpShape{
 	void *data;
 	
 	// User defined collision type for the shape.
-	unsigned int collision_type;
+	cpCollisionType collision_type;
 	// User defined collision group for the shape.
-	unsigned int group;
+	cpCollisionGroup group;
 	// User defined layer bitmask for the shape.
-	unsigned int layers;
+	cpLayers layers;
 	
 	// *** Internally Used Fields
 	
