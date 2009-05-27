@@ -85,9 +85,9 @@ void cpResetShapeIdCounter(void)
 
  Chipmunk keeps a counter so that every new shape is given a unique hash value to be used in the spatial hash. Because this affects the order in which the collisions are found and handled, you should reset the shape counter every time you populate a space with new shapes. If you don't, there might be (very) slight differences in the simulation.
 
-=cpShape Constructors:=
+=cpShape Types:=
 
-==Constructing Circle Shapes:==
+==Working With Circle Shapes:==
 
 {{{
 cpCircleShape *cpCircleShapeAlloc(void)
@@ -95,9 +95,16 @@ cpCircleShape *cpCircleShapeInit(cpCircleShape *circle, cpBody *body, cpVect off
 cpShape *cpCircleShapeNew(cpBody *body, cpFloat radius, cpVect offset)
 }}}
 
- `body` is the body to attach the circle to, `offset` is the offset from the body's center of gravity in body local coordinates. 
+ `body` is the body to attach the circle to, `offset` is the offset from the body's center of gravity in body local coordinates.
 
-==Constructing Segment Shapes:==
+{{{
+cpVect cpCircleShapeGetOffset(cpShape *circleShape)
+cpFloat cpCircleShapeGetRadius(cpShape *circleShape)
+}}}
+
+ Getters for circle shape properties. Passing as non-circle shape will throw an assertion.
+
+==Working With Segment Shapes:==
 
 {{{
 cpSegmentShape* cpSegmentShapeAlloc(void)
@@ -107,7 +114,16 @@ cpShape* cpSegmentShapeNew(cpBody *body, cpVect a, cpVect b, cpFloat radius)
 
  `body` is the body to attach the segment to, `a` and `b` are the endpoints, and `radius` is the thickness of the segment.
 
-==Constructing Polygon Shapes:==
+{{{
+cpVect cpSegmentShapeGetA(cpShape *shape)
+cpVect cpSegmentShapeGetA(cpShape *shape)
+cpVect cpSegmentShapeGetNormal(cpShape *shape)
+cpFloat cpSegmentShapeGetRadius(cpShape *shape)
+}}}
+
+ Getters for segment shape properties. Passing a non-segment shape will throw an assertion.
+
+==Working With Polygon Shapes:==
 
 {{{
 cpPolyShape *cpPolyShapeAlloc(void)
@@ -115,7 +131,18 @@ cpPolyShape *cpPolyShapeInit(cpPolyShape *poly, cpBody *body, int numVerts, cpVe
 cpShape *cpPolyShapeNew(cpBody *body, int numVerts, cpVect *verts, cpVect offset)
 }}}
 
- `body` is the body to attach the poly to, `verts` is an array of `cpVect`'s defining a convex hull with a clockwise winding, `offset` is the offset from the body's center of gravity in body local coordinates.
+ `body` is the body to attach the poly to, `verts` is an array of `cpVect`'s defining a convex hull with a clockwise winding, `offset` is the offset from the body's center of gravity in body local coordinates. An assertion will be thrown the vertexes are not convex or do not have a clockwise winding.
+
+{{{
+int cpPolyShapeGetNumVerts(cpShape *shape)
+cpVect cpPolyShapeGetVert(cpShape *shape, int index)
+}}}
+
+ Getters for poly shape properties. Passing a non-poly shape or an index that does not exist will throw an assertion.
+
+=Modifying cpShapes:=
+
+The short answer is that you can't because the changes would be only picked up as a change to the position of the shape's surface, but not it's velocity. The long answer is that you can using the "unsafe" API as long as you realize that doing so will not result in realistic physical behavior. These extra functions are define in a separate header chipmunk_unsafe.h.
 
 =Notes:= 
 
