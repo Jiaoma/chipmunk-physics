@@ -78,6 +78,27 @@ void cpBodySetMoment(cpBody *body, cpFloat i);
 void cpBodySetAngle(cpBody *body, cpFloat a);
 }}}
 
+==Getters and Setters==
+
+While you *MUST* use the setters in the previous section. You are encouraged to use setters/getters for all properties.
+
+Getters and setters will all be of the form:
+{{{
+cpFloat cpBodyGetMass(cpBody *body)
+void cpBodySetMass(cpBody *body, cpFloat mass)
+}}}
+
+|| Type || Name || Read Only? ||
+|| cpFloat || Mass || no ||
+|| cpFloat || Moment || no ||
+|| cpVect || Pos || no ||
+|| cpVect || Vel || no ||
+|| cpVect || Force || no ||
+|| cpFloat || Angle || no ||
+|| cpFloat || AngVel || no ||
+|| cpFloat || Torque || no ||
+|| cpVect || Rot || yes ||
+
 ==Integration Functions==
 
 {{{
@@ -119,7 +140,7 @@ cpVect cpBodyWorld2Local(cpBody *body, cpVect v)
 void cpBodyApplyImpulse(cpBody *body, cpVect j, cpVect r)
 }}}
 
- Apply the impulse `j` to `body` at offset `r`. Both `r` and `j` are in absolute coordinates.
+ Apply the impulse `j` to `body` at offset from the center of gravity `r`. Both `r` and `j` are in world coordinates.
 
 {{{
 void cpBodyResetForces(cpBody *body)
@@ -131,10 +152,10 @@ void cpBodyResetForces(cpBody *body)
 void cpBodyApplyForce(cpBody *body, cpVect f, cpVect r)
 }}}
 
- Apply (accumulate) the force `f` on `body` with offset `r`. Both `r` and `f` are in world coordinates.
+ Apply (accumulate) the force `f` on `body` with offset from the center of gravity `r`. Both `r` and `f` are in world coordinates.
 
 {{{
-void cpDampedSpring(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat rlen, cpFloat k, cpFloat dmp, cpFloat dt)
+void cpApplyDampedSpring(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat rlen, cpFloat k, cpFloat dmp, cpFloat dt)
 }}}
 
  Apply a spring force between bodies `a` and `b` at anchors `anchr1` and `anchr2` respectively. `k` is the spring constant ([http://en.wikipedia.org/wiki/Young's_modulus Young's modulus]), `rlen` is the rest length of the spring, `dmp` is the damping constant (force/velocity), and `dt` is the time step to apply the force over. *Note:* _not solving the damping forces in the impulse solver causes problems with large damping values. This function will eventually be replaced by a new constraint (joint) type._
