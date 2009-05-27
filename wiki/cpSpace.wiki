@@ -2,13 +2,22 @@
 
 Spaces in Chipmunk are the basic unit of simulation. You add rigid bodies, shapes and joints to it and then step them all forward together through time.
 
+==Iterations. What are they?==
+
+Chipmunk uses an iterative solver to figure out the forces between objects in the space. What this means is that it builds a big list of all of the collisions, joints, and other constraints between the bodies and makes several passes over the list considering each constraint individually. The number of passes it makes is the iteration count, and each iteration makes the solution more accurate. If you use too many iterations, the physics should look nice and solid, but may use up too much CPU time. If you use too few iterations, the simulation may seem mushy or bouncy when the objects should be solid. Setting the number of iterations lets you balance between CPU usage and the accuracy of the physics.
+
+
+===Elastic Iterations===
+
+New in Chipmunk 4 was the addition of elastic iterations. Previously, shapes did not stack nicely if their elasticity was anything other than 0. Elastic iterations separates solving the elastic bounce from the solidity of a normal resting contact. If you are having problems with your elastic shapes jittering when they come to a rest, you will need to use more elastic iterations.
+
 ==Static Shapes:==
 
 Static shapes? Chipmunk optimizes collision detection against shapes that do not move. These unmoving, or static shapes, are designated as such by the way they are added to the space. A normal shape is added by using `cpSpaceAddShape()` while a static shape is added using `cpSpaceAddStaticShape()`.
 
 In order to create a static shape, you need to create a cpBody with an infinite mass and moment of inertia to attach the shape to. If you don't don't use an infinite mass the body will gain velocity from colliding with other objects. This will cause it to behave strangely when colliding with other objects. You also don't want to add such a body to a space as it will gain velocity from gravity. 
 
-If you do move a body that a static shape is attached to, you *must* let Chipmunk know about it by calling `cpSpaceRehashStatic()`. If you don't, the precalculated collision detection data cached by the space will not get updated and collisions will be missed.
+If you do move a body that a static shape is attached to, you *MUST* let Chipmunk know about it by calling `cpSpaceRehashStatic()`. If you don't, the precalculated collision detection data cached by the space will not get updated and collisions will be missed.
 
 ==Type Definitions and Memory Management Functions:==
 
@@ -33,7 +42,7 @@ typedef struct cpSpace{
 } cpSpace;
 }}}
 
- * `iterations` and `elasticIterations` allow you to control the accuracy of the solver. See the note below.
+ * `iterations` and `elasticIterations` allow you to control the accuracy of the solver. See the section on iterations above for an explanation.
  * `gravity` is the value passed to each body's velocity integration function when it's integrated in the space.
  * `damping` is used in a calculation before passing it on to the velocity integration function like `gravity` is. The calculation currently applied ensures stability with variable sized time steps, but the implementation has issues and may be changed in the future.
 
@@ -60,15 +69,51 @@ void cpSpaceFreeChildren(cpSpace *space)
 void cpSpaceAddShape(cpSpace *space, cpShape *shape)
 void cpSpaceAddStaticShape(cpSpace *space, cpShape *shape)
 void cpSpaceAddBody(cpSpace *space, cpBody *body)
-void cpSpaceAddJoint(cpSpace *space, cpJoint *joint)
+void cpSpaceAddConstraint(cpSpace *space, cpConstraint *constraint)
 
 void cpSpaceRemoveShape(cpSpace *space, cpShape *shape)
 void cpSpaceRemoveStaticShape(cpSpace *space, cpShape *shape)
 void cpSpaceRemoveBody(cpSpace *space, cpBody *body)
-void cpSpaceRemoveJoint(cpSpace *space, cpJoint *joint)
+void cpSpaceRemoveConstraint(cpSpace *space, cpConstraint *constraint)
 }}}
 
- These functions add and remove shapes, bodies and joints from `space`. Shapes added as static are assumed not to move. Static shapes should be be attached to a rigid body with an infinite mass and moment of inertia. Also, don't add the rigid body used to the space, as that will cause it to fall under the effects of gravity.
+ These functions add and remove shapes, bodies and joints from `space`. See the section on Static Shapes above for an explanation of what a static shape is.
+
+==Collision Callbacks==
+
+Chipmunk allows you to register callback functions, called collision pair functions, to be called when shapes with certain pairs of collision types collide. For instance, say you make a collision type for the player, and another collision type for an enemy. You can add a collision callback to be called when a shape tagged with the player collision type collides with a shape tagged with the enemy collision type.
+
+The collision callback function is passed a fair amount of information on the collision including the points and normals of those points where the objects are colliding. You can also pass a `data` pointer when you register the collision pair callback to be passed in. Lastly, because of how the internals of Chipmunk work, if you want to use the normals in the contact point set, you will have to multiply them by the `normal_coef` in order for them to be guaranteed to be pointer from shape `a` to shape `b`.
+
+A feature that may be unique to Chipmunk is that the return value from the collision callback gives you one last chance to filter out a collision based on the specific collision details or just something more rigorous than can be done using layers and groups. Keep in mind that filtering by layer or group as faster as it performs the expensive primitive collision detection after that but before calling the callback.
+
+Lastly, Chipmunk implements the default behavior that shapes collide by default using a real collision pair function. The default function simply returns true for all collisions, but you can replace this function to implement something more complex.
+
+{{{
+typedef int (*cpCollFunc)(cpShape *a, cpShape *b, cpContact *contacts, int numContacts, cpFloat normal_coef, void *data)
+void cpSpaceAddCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b, cpCollFunc func, void *data)
+void cpSpaceRemoveCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b)
+void cpSpaceSetDefaultCollisionPairFunc(cpSpace *space, cpCollFunc func, void *data)
+}}}
+
+*WARNING:* While it is supported to remove shapes from a space within a collision callback, you cannot free them. Doing so will almost certainly cause a delayed crash.
+
+==Querying a Space==
+
+Point queries are useful for things like simple mouse selection or a simple sensor. It allows you to find out what shapes overlap a certain point.
+
+{{{
+typedef void (*cpSpacePointQueryFunc)(cpShape *shape, void *data)
+void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpLayers group, cpSpacePointQueryFunc func, void *data)
+
+cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpLayers group)
+}}}
+
+ `cpSpacePointQuery()` uses a callback to iterate all of the shapes that overlap the given point. The callback will be called with each shape and will be passed the same `data` pointer passed to `cpSpacePointQuery()`.
+
+ `cpSpacePointQueryFirst()`simply returns a single shape (there probably only is one anyway) or NULL if there were no overlapping shapes.
+
+ With both functions, layers and group work just like when colliding with other shapes to allow you to filter out certain shapes.
 
 ==Spatial Hash Management Functions:==
 
