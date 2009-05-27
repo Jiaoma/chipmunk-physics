@@ -91,10 +91,46 @@ cpFloat cpvlengthsq(const cpVect v)
  Returns the squared length of `v`. Faster than `cpvlength()` when you only need to compare lengths.
 
 {{{
+cpVect cpvlerp(const cpVect v1, const cpVect v2, const cpFloat t)
+}}}
+
+ Linearly interpolate between `v1` and `v2`.
+
+{{{
+cpVect cpvclamp(const cpVect v, const cpFloat len)
+}}}
+
+ Clamp `v` to length `len`.
+
+{{{
 cpVect cpvnormalize(const cpVect v)
 }}}
 
  Returns a normalized copy of `v`.
+
+{{{
+cpVect cpvnormalize_safe(const cpVect v)
+}}}
+
+ Returns a normalized copy of `v` or `cpvzero` if `v` was already `cpvzero`. Protects against divide by zero errors.
+
+{{{
+cpFloat cpvdist(const cpVect v1, const cpVect v2)
+}}}
+
+ Returns the distance between `v1` and `v2`.
+
+{{{
+cpFloat cpvdistsq(const cpVect v1, const cpVect v2)
+}}}
+
+ Returns the squared distance between `v1` and `v2`. Faster than `cpvdist()` when you only need to compare distances.
+
+{{{
+int cpvnear(const cpVect v1, const cpVect v2, const cpFloat dist)
+}}}
+
+ Returns true if the distance between `v1` and `v2` is less than `dist`.
 
 {{{
 cpVect cpvforangle(const cpFloat a)
