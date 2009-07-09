@@ -1,5 +1,5 @@
 #labels Documentation
-*THIS DOCUMENTATION IS CURRENTLY IN PROGRESS* You can find the [http://files.slembcke.net/chipmunk/chipmunk-docs.html old docs here]. Some of the end notes and tips are still missing in the new documentation.
+http://files.slembcke.net/chipmunk/logo/logo1_med.png
 
 =Introduction=
 
