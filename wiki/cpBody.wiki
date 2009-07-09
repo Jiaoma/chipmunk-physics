@@ -140,7 +140,7 @@ cpVect cpBodyWorld2Local(cpBody *body, cpVect v)
 void cpBodyApplyImpulse(cpBody *body, cpVect j, cpVect r)
 }}}
 
- Apply the impulse `j` to `body` at offset from the center of gravity `r`. Both `r` and `j` are in world coordinates.
+ Apply the impulse `j` to `body` at a relative offset `r` from the center of gravity. Both `r` and `j` are in world coordinates.
 
 {{{
 void cpBodyResetForces(cpBody *body)
@@ -152,7 +152,7 @@ void cpBodyResetForces(cpBody *body)
 void cpBodyApplyForce(cpBody *body, cpVect f, cpVect r)
 }}}
 
- Apply (accumulate) the force `f` on `body` with offset from the center of gravity `r`. Both `r` and `f` are in world coordinates.
+ Apply (accumulate) the force `f` on `body` at a relative offset `r` from the center of gravity. Both `r` and `f` are in world coordinates.
 
 {{{
 void cpApplyDampedSpring(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat rlen, cpFloat k, cpFloat dmp, cpFloat dt)
