@@ -10,7 +10,7 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
  * Haskell - [http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Hipmunk-0.2 Hipmunk]
  * Java - [http://code.google.com/p/chipmunk-java/ Chipmunk-Java]
  * Blitzmax - [http://code.google.com/p/maxmods/wiki/ChipmunkModule ChipmunkModule]
- * C++ - [http://www.slembcke.net/forums/viewtopic.php?f=6&t=231&p=1047&hilit=wrapper#p1047 C++ wrapper]
+ * C++ - [http://github.com/Irwin1138/ChipmunkWrapper/tree/master C++ wrapper]
  * Multimedia Fusion - [http://www.phizix.tk/ Phizix] (look under the extentions link)
 
 I know people have also used it from Lua as well, although Google seems to be of little help.
