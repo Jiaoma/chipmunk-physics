@@ -34,7 +34,7 @@ typedef struct cpBody{
 	// Linear components of motion (position, velocity, and force)
 	cpVect p, v, f;
 	
-	// Angular components of motion (angle, angular velocity, and torque)
+	// Angular components of motion (angle in radians, angular velocity, and torque)
 	// Always use cpBodySetAngle() to set the angle of the body as a and rot must agree.
 	cpFloat a, w, t;
 	

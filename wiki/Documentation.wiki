@@ -69,3 +69,9 @@ To represent vectors, Chipmunk defines the [cpVect] type and a set of inline fun
 
  * [cpArbiter] - Mostly used internally by the impulse solver, but it has uses in collision pair functions.
  * [cpSpaceHash] - Spatial hash implementation used by Chipmunk. You can use them for your non-physics based collision detection as well.
+
+=Links=
+
+* [http://files.slembcke.net/chipmunk/tutorials/MoonBuggyTutorial.tar.gz Moon Buggy tutorial] - A small tutorial
+* [http://www.slembcke.net/forums/viewforum.php?f=1 Forum] - The official forum
+* [Games] - A list of games done with Chipmunk

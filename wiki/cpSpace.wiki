@@ -90,11 +90,34 @@ A feature that may be unique to Chipmunk is that the return value from the colli
 Lastly, Chipmunk implements the default behavior that shapes collide by default using a real collision pair function. The default function simply returns true for all collisions, but you can replace this function to implement something more complex.
 
 {{{
+typedef struct cpContact{
+        // Contact point and normal.
+        cpVect p, n;
+        // Penetration distance.
+        cpFloat dist;
+        
+	...
+} cpContact;
+}}}
+
+ * `p` is the contact point in world coordinates
+ * `n` is the normal in world space, f you multiply it by the `normal_coef` supplied to you in the collision callback it will always point from the colliding surface of shape `a` to the colliding surface of shape `b`
+ * `dist` is how far the two objects are penetrating each other
+
+{{{
 typedef int (*cpCollFunc)(cpShape *a, cpShape *b, cpContact *contacts, int numContacts, cpFloat normal_coef, void *data)
 void cpSpaceAddCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b, cpCollFunc func, void *data)
 void cpSpaceRemoveCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b)
 void cpSpaceSetDefaultCollisionPairFunc(cpSpace *space, cpCollFunc func, void *data)
 }}}
+
+* You only need to make a single callback for any pair of objects. If
+  you make a callback for A and B, any collision between an A and a B
+  will send the callback the types in the same order as what they were
+  registered in the callback definition. That is why the `normal_coef`
+  parameter exists, Chipmunk may need to swap the shape order to
+  satisfy that, but it already has contact information defined the
+  other way around.
 
 *WARNING:* While it is supported to remove shapes from a space within a collision callback, you cannot free them. Doing so will almost certainly cause a delayed crash.
 
