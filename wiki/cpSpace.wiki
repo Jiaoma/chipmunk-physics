@@ -111,15 +111,9 @@ void cpSpaceRemoveCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisi
 void cpSpaceSetDefaultCollisionPairFunc(cpSpace *space, cpCollFunc func, void *data)
 }}}
 
-* You only need to make a single callback for any pair of objects. If
-  you make a callback for A and B, any collision between an A and a B
-  will send the callback the types in the same order as what they were
-  registered in the callback definition. That is why the `normal_coef`
-  parameter exists, Chipmunk may need to swap the shape order to
-  satisfy that, but it already has contact information defined the
-  other way around.
+You only need to make a single callback for any pair of objects. If you make a callback for A and B, any collision between an A and a B will send the callback the types in the same order as what they were registered in the callback definition. That is why the `normal_coef` parameter exists, Chipmunk may need to swap the shape order to satisfy that, but it already has contact information defined the other way around.
 
-*WARNING:* While it is supported to remove shapes from a space within a collision callback, you cannot free them. Doing so will almost certainly cause a delayed crash.
+*WARNING:* While it is supported to remove shapes from a space within a collision callback, you cannot free them. Doing so will almost certainly cause a delayed and hard to debug crash.
 
 ==Querying a Space==
 
