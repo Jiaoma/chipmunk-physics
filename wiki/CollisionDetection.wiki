@@ -13,3 +13,25 @@ The downside is that in order to get the best performance out of a spatial hash,
 Things to keep in mind:
  * Using too small a grid size means that your objects will be split into many grid cells which means that the spatial hash will spend a lot of time filling empty hash cells for just one object and rarely finding any with multiple objects. Making the grid size too big means that you will be putting a lot of objects into a single hash cell, and collisions will have to be checked between all of them.
  * Using too small of a hash table means that you will map too many far away objects into a single hash cell. Using too many means that the hash table will have to spend a lot of time doing clears and rehashes.
+
+For more information on spatial hashing in general, [http://graphics.ethz.ch/~brunoh/download/CollisionDetectionHashing_VMV03.pdf Optimized Spatial Hashing for Collision Detection of Deformable Objects] is a good paper that covers all the basics.
+
+== Collision Filtering ==
+
+After the spatial hash figures out pairs of shapes that are likely to be near each other, it passes them back to the space to perform some additional filtering on the pairs. If the pairs pass all the filters, then Chipmunk will test if the shapes are actually overlapping. These tests are much faster than the shape to shape collision checks, so use these if you can to reject collisions early instead of using callbacks if you can.
+
+ * *Bounding Box Test:* The shapes are not colliding if their bounding boxes are not overlapping.
+ * *Layer Test:* The shapes are not colliding if they don't occupy and of the same layers. (the bitwise and of their layer masks is 0)
+ * *Group Test:* Shapes shouldn't collide with other shapes in the same non-zero group.
+
+== Primitive Collision Detection ==
+
+The most expensive test that you can do to see if shapes should collide is to actually check based on their geometry. Circle to circle and circle to line collisions are very cheap still however. Poly to poly collisions get more expensive as the number of vertexes increases. Simpler shapes make for faster collisions (and more importantly fewer collision points for the solver to run).
+
+Chipmunk creates and maintains a list of the colliding objects at this points so that it can process physics on them, but you have one last and very flexible way of discarding the collisions.
+
+== Collision Callback filtering ==
+
+After all of the colliding shapes are found, Chipmunk iterates the list of colliding objects checking to see if there has been a collision callback defined for the pair of colliding objects. This gives you a large amount of flexibility to process collisions events, but also gives you a very flexible way to filter out collisions. The return value of the callback determines whether or not the colliding pair of shapes is discarded or not. Returning true will keep the pair, false will discard it. Lastly, setting `NULL` as the collision callback is the same as setting a function that always returns false. The default function (which can be set on a per space basis) simply returns true every time.
+
+While using callbacks to filter collisions is the most flexible way, keep in mind that by the time your callback is called all of the most expensive collision detection has already been done. For contact heavy simulations, the time spent finding collisions is small compared to the time spent solving the physics for them so it may not be a big deal. Still, use layers or groups first if you can.
