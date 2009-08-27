@@ -7,7 +7,7 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
   * Also available as a module for [http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration Gosu], which was featured in an [http://www.oreillynet.com/pub/a/ruby/2007/12/18/creating-games-in-ruby-part-2.html O'Reilly article].
  * Python - [http://code.google.com/p/pymunk/ Pymunk]
  * OCaml - [http://www.linux-nantes.org/~fmonnier/OCaml/Chipmunk/ OCaml-Chipmunk]
- * Haskell - [http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Hipmunk-0.2 Hipmunk]
+ * Haskell - [http://hackage.haskell.org/cgi-bin/hackage-scripts/package/Hipmunk Hipmunk]
  * Java - [http://code.google.com/p/chipmunk-java/ Chipmunk-Java]
  * Blitzmax - [http://code.google.com/p/maxmods/wiki/ChipmunkModule ChipmunkModule]
  * C++ - [http://github.com/Irwin1138/ChipmunkWrapper/tree/master C++ wrapper]
