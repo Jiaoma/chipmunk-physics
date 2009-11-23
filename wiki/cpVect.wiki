@@ -58,7 +58,13 @@ cpFloat cpvcross(const cpVect v1, const cpVect v2)
 cpVect cpvperp(const cpVect v)
 }}}
 
- Returns the perpendicular vector. (90 degree rotation)
+ Returns a perpendicular vector. (90 degree rotation)
+
+{{{
+cpVect cpvrperp(const cpVect v)
+}}}
+
+ Returns a perpendicular vector. (-90 degree rotation)
 
 {{{
 cpVect cpvproject(const cpVect v1, const cpVect v2)
@@ -95,6 +101,24 @@ cpVect cpvlerp(const cpVect v1, const cpVect v2, const cpFloat t)
 }}}
 
  Linearly interpolate between `v1` and `v2`.
+
+{{{
+cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat d)
+}}}
+
+ Linearly interpolate between `v1` towards `v2` by distance 'd'.
+
+{{{
+cpVect cpvslerp(const cpVect v1, const cpVect v2, const cpFloat t)
+}}}
+
+ Spherical linearly interpolate between `v1` and `v2`.
+
+{{{
+cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat a)
+}}}
+
+ Spherical linearly interpolate between `v1` towards `v2` by angle 'a'.
 
 {{{
 cpVect cpvclamp(const cpVect v, const cpFloat len)
