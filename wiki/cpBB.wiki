@@ -36,6 +36,18 @@ int cpBBcontainsVect(const cpBB bb, const cpVect v)
  Returns true if `bb` contains `v`.
 
 {{{
+int cpBBmerge(const cpBB a,  const cpBB b)
+}}}
+
+ Return the minimal bounding box that contains both `a` and `b`.
+
+{{{
+int cpBBexpand(const cpBB bb,  const cpVect v)
+}}}
+
+ Return the minimal bounding box that contains both `bb` and `v`.
+
+{{{
 cpVect cpBBClampVect(const cpBB bb, const cpVect v)
 }}}
 
