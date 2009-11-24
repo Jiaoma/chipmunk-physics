@@ -1,0 +1,16 @@
+Get an OpenGL transform for a Chipmunk body:
+
+{{{
+cpBody *body = node->body;
+cpVect pos = body->p;
+cpVect rot = body->rot;
+
+GLFloat matrix[16] = {
+	 rot.x, rot.y, 0.0f, 0.0f,
+	-rot.y, rot.x, 0.0f, 0.0f,
+	  0.0f,  0.0f, 1.0f, 0.0f,
+	 pos.x, pos.y, 0.0f, 1.0f,
+};
+
+glMultMatrixf(matrix.farr);
+}}}
