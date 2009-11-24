@@ -9,167 +9,87 @@ typedef struct cpVect{
 
  Simply a 2D vector packed into a struct. May change in the future to take advantage of SIMD.
 
-{{{
-#define cpvzero ((cpVect){0.0f, 0.0f})
-}}}
-
+{{{#define cpvzero ((cpVect){0.0f, 0.0f})}}}
  Constant for the zero vector.
 
-{{{
-cpVect cpv(const cpFloat x, const cpFloat y)
-}}}
-
+{{{cpVect cpv(const cpFloat x, const cpFloat y)}}}
  Convenience constructor for creating new `cpVect` structs.
 
 ==Operations==
 
-{{{
-cpVect cpvadd(const cpVect v1, const cpVect v2)
-cpVect cpvsub(const cpVect v1, const cpVect v2)
-}}}
+{{{cpVect cpvadd(const cpVect v1, const cpVect v2)}}}
 
+{{{cpVect cpvsub(const cpVect v1, const cpVect v2)}}}
  Add or subtract two vectors.
 
-{{{
-cpVect cpvneg(const cpVect v)
-}}}
-
+{{{cpVect cpvneg(const cpVect v)}}}
  Negate a vector.
 
-{{{
-cpVect cpvmult(const cpVect v, const cpFloat s)
-}}}
-
+{{{cpVect cpvmult(const cpVect v, const cpFloat s)}}}
  Scalar multiplication.
 
-{{{
-cpFloat cpvdot(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpFloat cpvdot(const cpVect v1, const cpVect v2)}}}
  Vector dot product.
 
-{{{
-cpFloat cpvcross(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpFloat cpvcross(const cpVect v1, const cpVect v2)}}}
  2D vector cross product analog. The cross product of 2D vectors results in a 3D vector with only a z component. This function returns the magnitude of the z value.
 
-{{{
-cpVect cpvperp(const cpVect v)
-}}}
-
+{{{cpVect cpvperp(const cpVect v)}}}
  Returns a perpendicular vector. (90 degree rotation)
 
-{{{
-cpVect cpvrperp(const cpVect v)
-}}}
-
+{{{cpVect cpvrperp(const cpVect v)}}}
  Returns a perpendicular vector. (-90 degree rotation)
 
-{{{
-cpVect cpvproject(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpVect cpvproject(const cpVect v1, const cpVect v2)}}}
  Returns the vector projection of `v1` onto `v2`.
 
-{{{
-cpVect cpvrotate(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpVect cpvrotate(const cpVect v1, const cpVect v2)}}}
  Uses complex multiplication to rotate `v1` by `v2`. Scaling will occur if `v1` is not a unit vector.
 
-{{{
-cpVect cpvunrotate(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpVect cpvunrotate(const cpVect v1, const cpVect v2)}}}
  Inverse of `cpvrotate()`.
 
-{{{
-cpFloat cpvlength(const cpVect v)
-}}}
-
+{{{cpFloat cpvlength(const cpVect v)}}}
  Returns the length of `v`.
 
-{{{
-cpFloat cpvlengthsq(const cpVect v)
-}}}
-
+{{{cpFloat cpvlengthsq(const cpVect v)}}}
  Returns the squared length of `v`. Faster than `cpvlength()` when you only need to compare lengths.
 
-{{{
-cpVect cpvlerp(const cpVect v1, const cpVect v2, const cpFloat t)
-}}}
-
+{{{cpVect cpvlerp(const cpVect v1, const cpVect v2, const cpFloat t)}}}
  Linearly interpolate between `v1` and `v2`.
 
-{{{
-cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat d)
-}}}
-
+{{{cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat d)}}}
  Linearly interpolate between `v1` towards `v2` by distance 'd'.
 
-{{{
-cpVect cpvslerp(const cpVect v1, const cpVect v2, const cpFloat t)
-}}}
-
+{{{cpVect cpvslerp(const cpVect v1, const cpVect v2, const cpFloat t)}}}
  Spherical linearly interpolate between `v1` and `v2`.
 
-{{{
-cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat a)
-}}}
-
+{{{cpVect cpvlerpconst(const cpVect v1, const cpVect v2, const cpFloat a)}}}
  Spherical linearly interpolate between `v1` towards `v2` by angle 'a'.
 
-{{{
-cpVect cpvclamp(const cpVect v, const cpFloat len)
-}}}
-
+{{{cpVect cpvclamp(const cpVect v, const cpFloat len)}}}
  Clamp `v` to length `len`.
 
-{{{
-cpVect cpvnormalize(const cpVect v)
-}}}
-
+{{{cpVect cpvnormalize(const cpVect v)}}}
  Returns a normalized copy of `v`.
 
-{{{
-cpVect cpvnormalize_safe(const cpVect v)
-}}}
-
+{{{cpVect cpvnormalize_safe(const cpVect v)}}}
  Returns a normalized copy of `v` or `cpvzero` if `v` was already `cpvzero`. Protects against divide by zero errors.
 
-{{{
-cpFloat cpvdist(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpFloat cpvdist(const cpVect v1, const cpVect v2)}}}
  Returns the distance between `v1` and `v2`.
 
-{{{
-cpFloat cpvdistsq(const cpVect v1, const cpVect v2)
-}}}
-
+{{{cpFloat cpvdistsq(const cpVect v1, const cpVect v2)}}}
  Returns the squared distance between `v1` and `v2`. Faster than `cpvdist()` when you only need to compare distances.
 
-{{{
-int cpvnear(const cpVect v1, const cpVect v2, const cpFloat dist)
-}}}
-
+{{{int cpvnear(const cpVect v1, const cpVect v2, const cpFloat dist)}}}
  Returns true if the distance between `v1` and `v2` is less than `dist`.
 
-{{{
-cpVect cpvforangle(const cpFloat a)
-}}}
-
+{{{cpVect cpvforangle(const cpFloat a)}}}
  Returns the unit length vector for the given angle (in radians).
 
-{{{
-cpFloat cpvtoangle(const cpVect v)
-}}}
-
+{{{cpFloat cpvtoangle(const cpVect v)}}}
  Returns the angular direction `v` is pointing in (in radians).
 
-{{{
-*cpvstr(const cpVect v)
-}}}
-
+{{{char *cpvstr(const cpVect v)}}}
  Returns a string representation of `v`. Intended mostly for debugging purposes and not production use. *NOTE:* _The string points to a static local and is reset every time the function is called. If you want to print more than one vector you will have to split up your printing onto separate lines._
