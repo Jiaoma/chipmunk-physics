@@ -1,4 +1,6 @@
-Get an OpenGL transform for a Chipmunk body:
+=Probably useful code snippets that I should organize=
+
+==Get an OpenGL transform for a Chipmunk body:==
 
 {{{
 cpBody *body = ...;
