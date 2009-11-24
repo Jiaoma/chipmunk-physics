@@ -24,5 +24,5 @@ While Chipmunk itself borrowed the solver from [http://www.box2d.org/ Box2D] bac
 
  * [http://code.google.com/p/glaze/ Glaze] - Chipmunk ported to the Flash AVM2.
  * [http://www.dsource.org/projects/blaze Blaze] - D based.
- * [http://github.com/sykopomp/squirl] - Chipmunk in LISP.
- * [http://code.google.com/p/physaxe/] - Chipmunk ported to haXe.
+ * [http://github.com/sykopomp/squirl Squirl] - Chipmunk in LISP.
+ * [http://code.google.com/p/physaxe/ Physaxe] - Chipmunk ported to haXe.
