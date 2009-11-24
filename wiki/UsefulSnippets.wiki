@@ -1,7 +1,7 @@
 Get an OpenGL transform for a Chipmunk body:
 
 {{{
-cpBody *body = node->body;
+cpBody *body = ...;
 cpVect pos = body->p;
 cpVect rot = body->rot;
 
