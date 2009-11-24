@@ -1,6 +1,8 @@
 =Probably useful code snippets that I should organize=
 
-==Get an OpenGL transform for a Chipmunk body:==
+==Get an OpenGL transform for a Chipmunk body==
+
+Instead of doing `glTranslate()` and a `glRotate()`, just do one transform. Much faster and doesn't require any trig functions.
 
 {{{
 cpBody *body = ...;
