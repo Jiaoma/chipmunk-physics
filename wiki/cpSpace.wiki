@@ -1,6 +1,6 @@
 =Chipmunk spaces: `cpSpace`=
 
-Spaces in Chipmunk are the basic unit of simulation. You add rigid bodies, shapes and joints to it and then step them all forward together through time.
+Spaces in Chipmunk are the basic unit of simulation. You add rigid bodies, shapes and joints to it and then step them all forward together through time. Adding powerful collision detection and physics to your game couldn't be simpler.
 
 ==Iterations. What are they?==
 
@@ -36,9 +36,6 @@ typedef struct cpSpace{
 	
 	// Default damping to supply when integrating rigid body motions.
 	cpFloat damping;
-	
-	// *** Internally Used Fields
-	// cpSpace contains many internally used fields that you probably could care less about.
 } cpSpace;
 }}}
 
@@ -61,7 +58,7 @@ void cpSpaceFree(cpSpace *space)
 void cpSpaceFreeChildren(cpSpace *space)
 }}}
 
- This function will free all of the shapes, bodies and joints that have been added to `space`. Does not free `space`. You will still need to call `cpSpaceFree()` on your own.
+ This function will free all of the shapes, bodies and joints that have been added to `space`. Does not free `space`. You will still need to call `cpSpaceFree()` on your own. You will probably never use this in a real game, as your gamestate or game controller should manage removing and freeing objects from the space.
 
 ==Operations:==
 
@@ -77,60 +74,7 @@ void cpSpaceRemoveBody(cpSpace *space, cpBody *body)
 void cpSpaceRemoveConstraint(cpSpace *space, cpConstraint *constraint)
 }}}
 
- These functions add and remove shapes, bodies and joints from `space`. See the section on Static Shapes above for an explanation of what a static shape is.
-
-==Collision Callbacks==
-
-Chipmunk allows you to register callback functions, called collision pair functions, to be called when shapes with certain pairs of collision types collide. For instance, say you make a collision type for the player, and another collision type for an enemy. You can add a collision callback to be called when a shape tagged with the player collision type collides with a shape tagged with the enemy collision type.
-
-The collision callback function is passed a fair amount of information on the collision including the points and normals of those points where the objects are colliding. You can also pass a `data` pointer when you register the collision pair callback to be passed in. Lastly, because of how the internals of Chipmunk work, if you want to use the normals in the contact point set, you will have to multiply them by the `normal_coef` in order for them to be guaranteed to be pointer from shape `a` to shape `b`.
-
-A feature that may be unique to Chipmunk is that the return value from the collision callback gives you one last chance to filter out a collision based on the specific collision details or just something more rigorous than can be done using layers and groups. Keep in mind that filtering by layer or group as faster as it performs the expensive primitive collision detection after that but before calling the callback.
-
-Lastly, Chipmunk implements the default behavior that shapes collide by default using a real collision pair function. The default function simply returns true for all collisions, but you can replace this function to implement something more complex.
-
-{{{
-typedef struct cpContact{
-        // Contact point and normal.
-        cpVect p, n;
-        // Penetration distance.
-        cpFloat dist;
-        
-	...
-} cpContact;
-}}}
-
- * `p` is the contact point in world coordinates
- * `n` is the normal in world space, f you multiply it by the `normal_coef` supplied to you in the collision callback it will always point from the colliding surface of shape `a` to the colliding surface of shape `b`
- * `dist` is how far the two objects are penetrating each other
-
-{{{
-typedef int (*cpCollFunc)(cpShape *a, cpShape *b, cpContact *contacts, int numContacts, cpFloat normal_coef, void *data)
-void cpSpaceAddCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b, cpCollFunc func, void *data)
-void cpSpaceRemoveCollisionPairFunc(cpSpace *space, cpCollisionType a, cpCollisionType b)
-void cpSpaceSetDefaultCollisionPairFunc(cpSpace *space, cpCollFunc func, void *data)
-}}}
-
-You only need to make a single callback for any pair of objects. If you make a callback for A and B, any collision between an A and a B will send the callback the types in the same order as what they were registered in the callback definition. That is why the `normal_coef` parameter exists, Chipmunk may need to swap the shape order to satisfy that, but it already has contact information defined the other way around.
-
-*WARNING:* While it is supported to remove shapes from a space within a collision callback, you cannot free them. Doing so will almost certainly cause a delayed and hard to debug crash.
-
-==Querying a Space==
-
-Point queries are useful for things like simple mouse selection or a simple sensor. It allows you to find out what shapes overlap a certain point.
-
-{{{
-typedef void (*cpSpacePointQueryFunc)(cpShape *shape, void *data)
-void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpLayers group, cpSpacePointQueryFunc func, void *data)
-
-cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpLayers group)
-}}}
-
- `cpSpacePointQuery()` uses a callback to iterate all of the shapes that overlap the given point. The callback will be called with each shape and will be passed the same `data` pointer passed to `cpSpacePointQuery()`.
-
- `cpSpacePointQueryFirst()`simply returns a single shape (there probably only is one anyway) or NULL if there were no overlapping shapes.
-
- With both functions, layers and group work just like when colliding with other shapes to allow you to filter out certain shapes.
+ These functions add and remove shapes, bodies and joints from `space`. See the section on Static Shapes above for an explanation of what a static shape is and how it differs from a normal shape.
 
 ==Spatial Hash Management Functions:==
 
@@ -143,15 +87,11 @@ void cpSpaceResizeActiveHash(cpSpace *space, cpFloat dim, int count)
 
  The spatial hashes used by Chipmunk's collision detection are fairly size sensitive. `dim` is the size of the hash cells. Setting `dim` to half the average collision shape size is likely to give the best performance. Setting 'dim' too small will cause the shape to be inserted into many cells, setting it too low will cause too many objects into the same slot.
 
- `count` is the _suggested_ minimum number of cells in the hash table. If there are too few cells, the spatial hash will return many false positives. Too many cells will be hard on the cache and waste memory. the  Setting `count` to ~10x the number of objects in the space is probably a good starting point. Tune from there if necessary.
+ `count` is the _suggested_ minimum number of cells in the hash table. If there are too few cells, the spatial hash will return many false positives. Too many cells will be hard on the cache and waste memory. the  Setting `count` to ~10x the number of objects in the space is probably a good starting point. Tune from there if necessary. By default, `dim` is 100.0, and `count` is 1000. The new demo program has a visualizer for the static hash. You can use this to get a feel for how to size things up against the spatial hash.
 
- By default, `dim` is 100.0, and `count` is 1000.
+{{{void cpSpaceRehashStatic(cpSpace *space)}}}
 
-{{{
-void cpSpaceRehashStatic(cpSpace *space)
-}}}
-
- Rehashes the shapes in the static spatial hash. You only need to call this if you move a static shapes.
+ Rehashes the shapes in the static spatial hash. You only need to call this if you move any static shapes.
 
 ==Simulating the Space:==
 
