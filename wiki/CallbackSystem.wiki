@@ -5,10 +5,12 @@ A physics library without any events or feedback would not be very useful for ga
 ==Collision Handlers==
 
 A collision handler is a set of 4 function callbacks for the different collision events that Chipmunk recognizes. The 4 event types are:
- * *begin:* Two shapes just started touching for the first time this step. Return false from the callback to make Chipmunk ignore the collision or true to process it normally.
- * *preSolve:* Two shapes are touching. Return false from the callback to make Chipmunk ignore the collision or true to process it normally. Additionally, you may override collision values such as cpArbiter.e and cpArbiter.u to provide custom friction or elasticity values. See [cpArbiter] for more info.
-* *postSolve:* Two shapes are touching and their collision response has been processed. You can retrieve the collision force at this time if you want to use it to calculate sound volumes or damage amounts. See [cpArbiter] for more info.
-* *separate:* Two shapes have just stopped touching for the first time this frame.
+ * *Begin:* Two shapes just started touching for the first time this step. Return false from the callback to make Chipmunk ignore the collision or true to process it normally.
+ * *Pre Solve:* Two shapes are touching. Return false from the callback to make Chipmunk ignore the collision or true to process it normally. Additionally, you may override collision values such as cpArbiter.e and cpArbiter.u to provide custom friction or elasticity values. See [cpArbiter] for more info.
+* *Post Solve:* Two shapes are touching and their collision response has been processed. You can retrieve the collision force at this time if you want to use it to calculate sound volumes or damage amounts. See [cpArbiter] for more info.
+* *Separate:* Two shapes have just stopped touching for the first time this frame.
+
+*Note:* Shapes tagged as sensors (cpShape.sensor == true) never generate collisions that get processed so collisions between sensors shapes and other shapes will never call the post solve callback. They still generate begin, and separate callbacks, and the pre solve callback is also called every frame even though there is no real collision.
 
 {{{
 typedef int (*cpCollisionBeginFunc)(cpArbiter *arb, struct cpSpace *space, void *data)
@@ -100,3 +102,5 @@ begin(cpArbiter *arb, cpSpace *space, void *unused)
 // Kill the monster by removing it's shape and body from the space as soon as it's hit by a bullet 
 cpSpaceAddCollisionHandler(space, BULLET_TYPE, MONSTER_TYPE, begin, NULL, NULL, NULL, NULL);
 }}}
+
+For more examples, see the [http://code.google.com/p/chipmunk-physics/source/browse/trunk/Demo/OneWay.c One Way Platform Demo], [http://code.google.com/p/chipmunk-physics/source/browse/trunk/Demo/Sensors.c Sensors Demo], or the [http://code.google.com/p/chipmunk-physics/source/browse/trunk/Demo/Player.c Player Demo].
