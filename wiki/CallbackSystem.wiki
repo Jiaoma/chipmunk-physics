@@ -1,0 +1,68 @@
+=Callbacks=
+
+A physics library without any events or feedback would not be very useful for games. How would you know when the player bumped into an enemy and needs to have some health points taken away? How would you know how hard the car smashed into the wall so you don't play a loud crash noise when a pebble hits it? What if you need to provide  Chipmunk has a number of callback systems that you can plug into to accomplish all of that and a lot more.
+
+==Collision Handlers==
+
+A collision handler is a set of 4 function callbacks for the different collision events that Chipmunk recognizes. The 4 event types are:
+ * *begin:* Two shapes just started touching for the first time this step. Return false from the callback to make Chipmunk ignore the collision or true to process it normally.
+ * *preSolve:* Two shapes are touching. Return false from the callback to make Chipmunk ignore the collision or true to process it normally. Additionally, you may override collision values such as cpArbiter.e and cpArbiter.u to provide custom friction or elasticity values. See [cpArbiter] for more info.
+* *postSolve:* Two shapes are touching and their collision response has been processed. You can retrieve the collision force at this time if you want to use it to calculate sound volumes or damage amounts. See [cpArbiter] for more info.
+* *separate:* Two shapes have just stopped touching for the first time this frame.
+
+{{{
+typedef int (*cpCollisionBeginFunc)(cpArbiter *arb, struct cpSpace *space, void *data)
+typedef int (*cpCollisionPreSolveFunc)(cpArbiter *arb, struct cpSpace *space, void *data)
+typedef void (*cpCollisionPostSolveFunc)(cpArbiter *arb, struct cpSpace *space, void *data)
+typedef void (*cpCollisionSeparateFunc)(cpArbiter *arb, struct cpSpace *space, void *data)
+}}}
+
+ Function types for the various collision callback events that you can register.
+
+{{{
+void cpSpaceAddCollisionHandler(
+	cpSpace *space,
+	cpCollisionType a, cpCollisionType b,
+	cpCollisionBeginFunc begin,
+	cpCollisionPreSolveFunc preSolve,
+	cpCollisionPostSolveFunc postSolve,
+	cpCollisionSeparateFunc separate,
+	void *data
+)
+}}}
+
+Add a collision handler for given collision type pair. Whenever a shapes with collision_type `a` and collision_type `b` collide, these callbacks will be used to process the collision. `data` is a user definable context pointer that is passed to each of the callbacks. NULL can be provided for callbacks you do not wish to implement, however Chipmunk will call it's own default versions for these and not the default ones you've set up for the space. If you need to fall back on the space's default callbacks, you'll have to provide them individually to each handler definition.
+
+{{{void cpSpaceRemoveCollisionHandler(cpSpace *space, cpCollisionType a, cpCollisionType b)}}}
+ Remove a collision handler for a given collision type pair.
+
+{{{
+void cpSpaceSetDefaultCollisionPairFunc(
+	cpSpace *space,
+	cpCollisionType a, cpCollisionType b,
+	cpCollisionBeginFunc begin,
+	cpCollisionPreSolveFunc preSolve,
+	cpCollisionPostSolveFunc postSolve,
+	cpCollisionSeparateFunc separate,
+	void *data
+)
+}}}
+
+Register a default collision handler to be used when no specific collision handler is found. If you do nothing, the space will be given a default handler that accepts all collisions in `begin()` and `preSolve()` and does nothing for the `postSolve()` and `separate()` callbacks.
+
+
+==Integration Callbacks==
+
+The things on cpBody.
+
+==Post Step Callbacks==
+
+Post step callbacks are the place where you can break the rules about removing objects from within a callback. In fact, their primary function is to help you safely remove objects from the space that were destroyed or disabled during the step.
+
+Post step callbacks are registered as a function and a pointer to an object used as a key. You can only register one post step callback per object. This prevents you from removing an object more than once. For instance, say that you get a collision callback between a bullet and object A. The bullet and object A are destroyed, so you add a post step callback for each to remove. In the same step, the same bullet also hit object B and you add two more callbacks, one for object B and a second for the bullet. This is actually just fine, and the callback to remove the bullet will only be called once!
+
+{{{typedef void (*cpPostStepFunc)(cpSpace *space, void *obj, void *data)}}}
+ Function type used for post step callbacks. `space` is the space the callback was registered on, `obj` is the pointer value you supplied as the key, and `data` is a user definable pointer you can use to pass in a context value.
+
+{{{void cpSpaceAddPostStepCallback(cpSpace *space, cpPostStepFunc func, void *obj, void *data)}}}
+ Add `func` to be called before the current or next call to `cpSpaceStep()` returns. Only the first callback registered for any unique value of `obj` will be recorded.
