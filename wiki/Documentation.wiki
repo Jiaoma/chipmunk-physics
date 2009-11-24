@@ -5,15 +5,17 @@ http://files.slembcke.net/chipmunk/logo/logo1_med.png
 
 First of all, Chipmunk is a 2D rigid body physics library distributed under the MIT license. Though not yet complete, it is intended to be fast, numerically stable, and easy to use.
 
-It’s been a long time in coming, but I’ve finally made a stable and usable physics implementation. While not feature complete yet, it’s well on it’s way. I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver come from his Box2D example code. (Now a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Couldn’t have gotten that working without his help.
+It’s been a long time in coming, but I’ve finally made a stable and usable physics implementation. While not feature complete yet, it’s well on it’s way. I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver come from his Box2D example code. (Now a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Couldn’t have gotten that working without his algorithm.
 
 
 =Overview=
 
- * *rigid bodies:* A rigid body holds the physical properties of an object. (mass, position, rotation, velocity, etc.) It does not have a shape by itself. If you’ve done physics with particles before, rigid bodies differ mostly in that they are able to rotate.
- * *collision shapes:* By attaching shapes to bodies, you can define the a body’s shape. You can attach many shapes to a single body to define a complex shape, or none if it doesn’t require a shape.
- * *joints:* You can attach joints between two bodies to constrain their behavior.
- * *spaces:* Spaces are the basic simulation unit in Chipmunk. You add bodies, shapes and joints to a space, and then update the space as a whole.
+There are 4 basic things you need to know about in order to work with Chipmunk.
+
+ * *Rigid Bodies:* A rigid body holds the physical properties of an object. (mass, position, rotation, velocity, etc.) It does not have a shape by itself. If you’ve done physics with particles before, rigid bodies differ in that they are able to rotate.
+ * *Collision Shapes:* By attaching shapes to bodies, you can define the a body’s shape. You can attach as many shapes to a single body as you need to in order to define a complex shape. Shapes contain the surface properties of an object such as how much friction or elasticity it has.
+ * *Constraints/Joints:* Constraints and joints describe how bodies are attached to each other.
+ * *Spaces:* Spaces are the basic simulation unit in Chipmunk. You add bodies, shapes and joints to a space, and then update the space as a whole.
 
 ==Rigid bodies, collision shapes and sprites:==
 
@@ -24,7 +26,7 @@ There is often confusion between rigid bodies and their collision shapes in Chip
 
 ==Initialization==
 
-Before you do anything else, you *must* initialize Chipmunk.
+Before you do anything else, you *must* initialize Chipmunk. Otherwise you _will_ crash as soon as the first collision happens.
 
 {{{
 cpInitChipmunk(); // That is all
@@ -50,6 +52,26 @@ In general, you are responsible for freeing any structs that you allocate. Chipm
 ==Math the Chipmunk way==
 
 First of all, Chipmunk uses double precision floating point numbers throughout it's calculations by default. This is likely to be faster on most modern desktop processors, and means you have to worry less about floating point round off errors. You can change the floating point type used by Chipmunk when compiling the library. Look in chipmunk.h.
+
+Chipmunk defines a number of aliases for common math functions so that you can choose to use floats or doubles for Chipmunk's floating point type. There isn't a strong reason to use these outside of the library's code. Don't worry 
+
+{{{
+cpFloat cpfclamp(cpFloat f, cpFloat min, cpFloat max)
+}}}
+
+Clamp `f` to be between `min` and `max`.
+
+{{{
+cpFloat cpflerp(cpFloat f1, cpFloat f2, cpFloat t)
+}}}
+
+Linearly interpolate between `f1` and `f2`.
+
+{{{
+cpFloat cpflerpconst(cpFloat f1, cpFloat f2, cpFloat d)
+}}}
+
+Linearly interpolate from `f1` towards `f2` by `d`.
 
 To represent vectors, Chipmunk defines the [cpVect] type and a set of inline functions for working with them (cpv, cpvadd, cpvmult, etc). See the API reference for more information..
 
