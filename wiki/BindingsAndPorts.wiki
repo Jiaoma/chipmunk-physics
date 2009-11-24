@@ -12,6 +12,7 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
  * Blitzmax - [http://code.google.com/p/maxmods/wiki/ChipmunkModule ChipmunkModule]
  * C++ - [http://github.com/Irwin1138/ChipmunkWrapper/tree/master C++ wrapper]
  * Multimedia Fusion - [http://www.phizix.tk/ Phizix] (look under the extentions link)
+ * I have a binding for OOC if people are interested, though both the language and binding are a bit experimental.
 
 I know people have also used it from Lua as well, although Google seems to be of little help.
 
@@ -19,7 +20,9 @@ If you've written a binding that's not on this list, send me an email.
 
 =Ports:=
 
-While Chipmunk itself borrowed the solver from [http://www.box2d.org/ Box2D] back when it was but a wee demo and replaced the collision detection added other features, so have other people done the same with Chipmunk.
+While Chipmunk itself borrowed the solver from [http://www.box2d.org/ Box2D] back when it was but a wee demo and replaced the collision detection added other features, so have other people done the same with Chipmunk. All of them have significant added features of their own.
 
  * [http://code.google.com/p/glaze/ Glaze] - Chipmunk ported to the Flash AVM2.
- * [http://www.dsource.org/projects/blaze Blaze] - D based 
+ * [http://www.dsource.org/projects/blaze Blaze] - D based.
+ * [http://github.com/sykopomp/squirl] - Chipmunk in LISP.
+ * [http://code.google.com/p/physaxe/] - Chipmunk ported to haXe.
