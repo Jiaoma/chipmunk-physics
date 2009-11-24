@@ -30,8 +30,8 @@ The most expensive test that you can do to see if shapes should collide is to ac
 
 Chipmunk creates and maintains a list of the colliding objects at this points so that it can process physics on them, but you have one last and very flexible way of discarding the collisions.
 
-== Collision Callback filtering ==
+== Collision Handler Filtering ==
 
-After all of the colliding shapes are found, Chipmunk iterates the list of colliding objects checking to see if there has been a collision callback defined for the pair of colliding objects. This gives you a large amount of flexibility to process collisions events, but also gives you a very flexible way to filter out collisions. The return value of the callback determines whether or not the colliding pair of shapes is discarded or not. Returning true will keep the pair, false will discard it. Lastly, setting `NULL` as the collision callback is the same as setting a function that always returns false. The default function (which can be set on a per space basis) simply returns true every time.
+After checking if two shapes overlap Chipmunk will look to see if you have defined a collision handler for the collision types of the shapes. This gives you a large amount of flexibility to process collisions events, but also gives you a very flexible way to filter out collisions. The return value of the begin and preSolve callback determines whether or not the colliding pair of shapes is discarded or not. Returning true will keep the pair, false will discard it. If you don't define a handler for the given collision_types, Chipmunk will call the space's default handler, which by default is defined to simply accept all collisions.
 
 While using callbacks to filter collisions is the most flexible way, keep in mind that by the time your callback is called all of the most expensive collision detection has already been done. For contact heavy simulations, the time spent finding collisions is small compared to the time spent solving the physics for them so it may not be a big deal. Still, use layers or groups first if you can.
