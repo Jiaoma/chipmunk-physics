@@ -3,10 +3,9 @@
 ==Struct Definition, Constants and Constructors==
 {{{
 typedef struct cpVect{
-	cpFloat x,y;
+	cpFloat x, y;
 } cpVect
 }}}
-
  Simply a 2D vector packed into a struct. May change in the future to take advantage of SIMD.
 
 {{{#define cpvzero ((cpVect){0.0f, 0.0f})}}}
