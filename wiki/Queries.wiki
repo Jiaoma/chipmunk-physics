@@ -1,0 +1,45 @@
+#summary Segment and point queries against spaces and individual shapes.
+
+=Queries=
+
+Chipmunk currently supports two kinds of spatial queries, segment and point. Either type can be done efficiently against an entire space, or against individual shapes. Both types of queries take a collision group and layer that are used to filter matches out using the same rules used for filtering collisions between shapes. See [cpShape] for more information. If you don't want to filter out any matches, use -1 for the layers and 0 as the group.
+
+==Point Queries==
+
+Point queries are useful for things like mouse picking and simple sensors.
+
+{{{int cpShapePointQuery(cpShape *shape, cpVect p, cpLayers layers, cpGroup group)}}}
+
+{{{
+typedef void (*cpSpacePointQueryFunc)(cpShape *shape, void *data);
+void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpGroup group, cpSpacePointQueryFunc func, void *data)
+}}}
+
+{{{cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpGroup group)}}}
+
+
+==Segment Queries==
+
+{{{
+typedef struct cpSegmentQueryInfo{
+	struct cpShape *shape; // shape that was hit, NULL if no collision
+	cpFloat t; // Distance along query segment, will always be in the range [0, 1].
+	cpVect n; // normal of hit surface
+} cpSegmentQueryInfo;
+}}}
+ Segment queries return more information than just a simple yes or no, they also return where a shape was hit and it's surface normal at the hit point. `t` is the percentage between the query start and end points. If you need the hit point in world space or the absolute distance from start, see the segment query helper functions later.
+
+{{{int cpShapeSegmentQuery(cpShape *shape, cpVect a, cpVect b, cpLayers layers, cpGroup group, cpSegmentQueryInfo *info)}}}
+
+{{{
+typedef void (*cpSpaceSegmentQueryFunc)(cpShape *shape, cpFloat t, cpVect n, void *data)
+int cpSpaceSegmentQuery(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSpaceSegmentQueryFunc func, void *data)
+}}}
+
+{{{int cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSegmentQueryInfo *out)}}}
+
+===Segment Query Helper Functions===
+
+{{{cpVect cpSegmentQueryHitPoint(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
+
+{{{cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
