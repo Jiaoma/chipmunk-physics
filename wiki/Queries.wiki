@@ -18,7 +18,7 @@ void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpGroup gr
  Query `space` at `point` filtering out matches with the given `layers` and `group`. `func` is called for each shape found along with the `data` argument passed to `cpSpacePointQuery()`.
 
 {{{cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpGroup group)}}}
- Query `space` at `point` and return the first shape found matching the given `layers` and `group`. Returns NULL if no shape was found.
+ Query `space` at `point` and return the first shape found matching the given `layers` and `group`. Returns `NULL` if no shape was found.
 
 ==Segment Queries==
 
@@ -43,7 +43,7 @@ int cpSpaceSegmentQuery(cpSpace *space, cpVect start, cpVect end, cpLayers layer
   Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. `func` is called with the normalized distance along the line and surface normal for each shape found along with the `data` argument passed to `cpSpacePointQuery()`.
 
 {{{cpShape *cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSegmentQueryInfo *out)}}}
- Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. Only the first shape encountered is returned and the search is short circuited.
+ Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. Only the first shape encountered is returned and the search is short circuited. Returns `NULL` if no shape was found.
 
 ===Segment Query Helper Functions===
 
@@ -52,3 +52,43 @@ int cpSpaceSegmentQuery(cpSpace *space, cpVect start, cpVect end, cpLayers layer
 
 {{{cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
  Return the absolute distance where the segment first hit the shape.
+
+==Examples==
+
+This is the mouse button handler function from the demo app. On mouse down, it finds the shape under the mouse if there is one and adds a joint to it so that you can drag it around.
+{{{
+static void
+click(int button, int state, int x, int y)
+{
+	if(button == GLUT_LEFT_BUTTON){
+		if(state == GLUT_DOWN){
+			cpVect point = mouseToSpace(x, y);
+		
+			cpShape *shape = cpSpacePointQueryFirst(space, point, GRABABLE_MASK_BIT, 0);
+			if(shape){
+				cpBody *body = shape->body;
+				mouseJoint = cpPivotJointNew2(mouseBody, body, cpvzero, cpBodyWorld2Local(body, point));
+				mouseJoint->maxForce = 50000.0f;
+				mouseJoint->biasCoef = 0.15f;
+				cpSpaceAddConstraint(space, mouseJoint);
+			}
+		} else if(mouseJoint){
+			cpSpaceRemoveConstraint(space, mouseJoint);
+			cpConstraintFree(mouseJoint);
+			mouseJoint = NULL;
+		}
+	}
+}
+}}}
+
+Shoot a laser through a space, find the first shape it hits. We want to draw particles where the laser beam enters and exits the shape.
+{{{
+cpSegmentQueryInfo info;
+if(cpSpaceSegmentQueryFirst(space, a, b, -1, 0, &info)){
+	cpSegmentQueryInfo info2;
+	cpShapeSegmentQuery(info.shape, b, a, &info2);
+	
+	cpVect enterPoint = cpSegmentQueryHitPoint(a, b, info);
+	cpVect exitPoint = cpSegmentQueryHitPoint(b, a, info2);
+}
+}}}
