@@ -22,6 +22,8 @@ void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpGroup gr
 
 ==Segment Queries==
 
+Segment queries are like ray casting, but because Chipmunk uses a spatial hash to process collisions, it cannot process infinitely long queries like a ray. In practice this is still very fast and you don't need to worry too much about the performance as long as you aren't using very long segments for your queries.
+
 {{{
 typedef struct cpSegmentQueryInfo{
 	struct cpShape *shape; // shape that was hit, NULL if no collision
@@ -32,16 +34,21 @@ typedef struct cpSegmentQueryInfo{
  Segment queries return more information than just a simple yes or no, they also return where a shape was hit and it's surface normal at the hit point. `t` is the percentage between the query start and end points. If you need the hit point in world space or the absolute distance from start, see the segment query helper functions later.
 
 {{{int cpShapeSegmentQuery(cpShape *shape, cpVect a, cpVect b, cpSegmentQueryInfo *info)}}}
+ Check if the line segment from `a` to `b` intersects the shape. `info` must be a valid pointer to a `cpSegmentQueryInfo` structure which will be initialized if the line segment intersects.
 
 {{{
 typedef void (*cpSpaceSegmentQueryFunc)(cpShape *shape, cpFloat t, cpVect n, void *data)
 int cpSpaceSegmentQuery(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSpaceSegmentQueryFunc func, void *data)
 }}}
+  Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. `func` is called with the normalized distance along the line and surface normal for each shape found along with the `data` argument passed to `cpSpacePointQuery()`.
 
 {{{cpShape *cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSegmentQueryInfo *out)}}}
+ Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. Only the first shape encountered is returned and the search is short circuited.
 
 ===Segment Query Helper Functions===
 
 {{{cpVect cpSegmentQueryHitPoint(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
+ Return the hit point in world coordinates where the segment first intersected with the shape.
 
 {{{cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
+ Return the absolute distance where the segment first hit the shape.
