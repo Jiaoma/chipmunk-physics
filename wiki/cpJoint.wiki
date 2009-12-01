@@ -1,13 +1,22 @@
-=Chipmunk joints: `cpJoint`=
+=Chipmunk Constraints: `cpConstraint`=
 
-==Joint Types:==
+A constraint is something that describes how two bodies interact with each other. (how they constraint each other) Constraints can be simple joints that allow bodies to pivot around each other like the bones in your body, or they can be more abstract like the gear joint or motors.
 
-There are currently 4 kinds of joints:
+==What constraints are and what they are not==
 
- * *Pin Joints* connect two rigid bodies with a solid pin or rod. It keeps the anchor points at a set distance from one another.
- * *Slide Joints* are like pin joints, but have a minimum and maximum distance. A chain could be modeled using this joint. It keeps the anchor points from getting to far apart, but will allow them to get closer together.
- * *Pivot Joints* simply allow two objects to pivot about a single point.
- * *Groove Joints* attach a point on one body to a groove on the other. Think of it as a sliding pivot joint.
+Constraints in Chipmunk are all velocity based constraints. This means that they act primarily by synchronizing the velocity of two bodies. A pivot joint holds two anchor points on two separate bodies together by defining equations that say that the velocity of the anchor points must be the same and calculating impulses to apply to the bodies to try and keep it that way. A constraint takes a velocity as it's primary input and produces a velocity change as it's output. 
+
+A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. TODO: finish
+
+==Error correction by Feedback==
+
+TODO: stub
+
+==Constraints and Collision Shapes==
+
+TODO: stub
+
+=API:=
 
 ==Shared Memory Management Functions:==
 
@@ -18,7 +27,7 @@ void cpJointFree(cpJoint *joint)
 
  `Destroy` and `Free` functions are shared by all joint types. Allocation and initialization functions are specific to each joint type.
  
-=Joint Constructors:=
+=Joint Types:=
 
 ==Pin Joints:==
 
