@@ -87,7 +87,7 @@ void cpSpaceResizeActiveHash(cpSpace *space, cpFloat dim, int count)
 
  The spatial hashes used by Chipmunk's collision detection are fairly size sensitive. `dim` is the size of the hash cells. Setting `dim` to the average collision shape size is likely to give the best performance. Setting 'dim' too small will cause the shape to be inserted into many cells, setting it too low will cause too many objects into the same slot.
 
-Using the spatial has visualization in the demo program you can see what I mean. A good `dim` size is when your objects fit nicely into the grid:
+Using the spatial has visualization in the demo program you can see what I mean. The grey squares represent cells in the spatial hash. The darker the cell, the more objects have been mapped into that cell. A good `dim` size is when your objects fit nicely into the grid:
 
 http://chipmunk-physics.googlecode.com/svn/wiki/images/hash_just_right.png
 
