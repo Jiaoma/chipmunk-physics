@@ -14,7 +14,7 @@ Things to keep in mind:
  * Using too small a grid size means that your objects will be split into many grid cells which means that the spatial hash will spend a lot of time filling empty hash cells for just one object and rarely finding any with multiple objects. Making the grid size too big means that you will be putting a lot of objects into a single hash cell, and collisions will have to be checked between all of them.
  * Using too small of a hash table means that you will map too many far away objects into a single hash cell. Using too many means that the hash table will have to spend a lot of time doing clears and rehashes.
 
-For more information on spatial hashing in general, [http://graphics.ethz.ch/~brunoh/download/CollisionDetectionHashing_VMV03.pdf Optimized Spatial Hashing for Collision Detection of Deformable Objects] is a good paper that covers all the basics.
+For more information on spatial hashing in general, [http://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf Optimized Spatial Hashing for Collision Detection of Deformable Objects] is a good paper that covers all the basics.
 
 == Collision Filtering ==
 
