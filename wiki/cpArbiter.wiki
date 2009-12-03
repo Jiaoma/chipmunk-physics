@@ -1,0 +1,51 @@
+#summary Arbiters are collision pairs between shapes that are used with the collision callbacks.
+
+=Chipmunk Collision Pairs: `cpArbiter`=
+
+First of all, why are they called arbiters? The short answer is that Box2D called them that way back in the day when I was looking at the source for it before it came the Box2D physics engine. An arbiter is like a judge, a person that has authority to  settle disputes between two people. It was a fun name and was shorter to type than CollisionPair.
+
+Originally arbiters were going to be an internal data type that Chipmunk used that would have no real use to anybody externally. In Chipmunk 4.x and earlier, only a single callback hook was provided for handling collision events that was triggered every step that to shapes were touching. This made it non-trivial to track when objects started and stopped touching as the user would have to record and process this separately. Many people, including myself, wanted to get collision begin/separate events and eventually I realized that information was already being stored in the arbiter cache that the 
+
+==Struct Definitions==
+
+{{{
+typedef struct cpArbiter{
+	// Information on the contact points between the objects.
+	int numContacts;
+	cpContact *contacts;
+	
+	// The two shapes involved in the collision.
+	cpShape *a, *b;
+	
+	// Calculated before calling the pre-solve collision handler
+	// Override them with custom
+	cpFloat e;
+	cpFloat u;
+	 // Used for surface_v calculations, implementation may change
+	cpVect surface_vr;
+	
+	// Time stamp of the arbiter. (from cpSpace)
+	int stamp;
+	
+	// Are the shapes swapped in relation to the collision handler?
+	int swappedColl;
+	
+	struct cpCollisionHandler *handler;
+} cpArbiter
+}}}
+ 
+{{{
+typedef struct cpContact {
+	// Contact point and normal.
+	cpVect p, n;
+	// Penetration distance.
+	cpFloat dist;
+} cpContact
+}}}
+
+
+==Memory Management==
+
+You should never need to create an arbiter, nor will you ever need to free one as they are handled by the space. More importantly, because they are handled by the space you should never hold onto a reference to an arbiter as you don't know when they will be destroyed. Use them within the callback where they are given to you and then forget about them or copy out the information you need from them.
+
+==Helper Functions==
