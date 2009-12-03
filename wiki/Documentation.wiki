@@ -33,7 +33,7 @@ Before you do anything else, you *must* initialize Chipmunk. Otherwise you _will
 cpInitChipmunk(); // That is all
 }}}
 
-If you find this annoying, worry not as it's likely to go away in the future.
+Additionally, if you didn't compile Chipmunk with the NDEBUG flag, it will print out the debug mode message and the current version number to stdout.
 
 ==Memory Management the Chipmunk way==
 
