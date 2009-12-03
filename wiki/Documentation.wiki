@@ -18,6 +18,10 @@ There are 4 basic things you need to know about in order to work with Chipmunk.
  * *Constraints/Joints:* Constraints and joints describe how bodies are attached to each other.
  * *Spaces:* Spaces are the basic simulation unit in Chipmunk. You add bodies, shapes and joints to a space, and then update the space as a whole.
 
+=Support=
+
+The best way to get support is to visit the [http://www.slembcke.net/forums/viewforum.php?f=1 Chipmunk Forums]. There are plenty of people around using Chipmunk on the just about every platform I've ever heard of. If you are working on a commercial project, Howling Moon Software is also available for [contracting].
+
 ==Rigid bodies, collision shapes and sprites:==
 
 There is often confusion between rigid bodies and their collision shapes in Chipmunk and how they relate to sprites. A sprite would be a visual representation of an object, the sprite is drawn at the position and rotation of the rigid body. Collision shapes representation of the object, and how it should collide with other objects. A sprite and collision shape have little to do with one another other than you probably want the collision shape to match the sprite’s shape.
