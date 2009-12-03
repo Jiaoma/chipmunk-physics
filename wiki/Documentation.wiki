@@ -20,7 +20,7 @@ There are 4 basic things you need to know about in order to work with Chipmunk.
 
 =Support=
 
-The best way to get support is to visit the [http://www.slembcke.net/forums/viewforum.php?f=1 Chipmunk Forums]. There are plenty of people around using Chipmunk on the just about every platform I've ever heard of. If you are working on a commercial project, Howling Moon Software is also available for [contracting].
+The best way to get support is to visit the [http://www.slembcke.net/forums/viewforum.php?f=1 Chipmunk Forums]. There are plenty of people around using Chipmunk on the just about every platform I've ever heard of. If you are working on a commercial project, Howling Moon Software is also available for [http://howlingmoonsoftware.com/contracting.php contracting].
 
 ==Rigid bodies, collision shapes and sprites:==
 
