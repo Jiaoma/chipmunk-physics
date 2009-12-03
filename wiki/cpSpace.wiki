@@ -101,7 +101,9 @@ http://chipmunk-physics.googlecode.com/svn/wiki/images/hash_too_big.png
 
  `count` is the _suggested_ minimum number of cells in the hash table. If there are too few cells, the spatial hash will return many false positives. Too many cells will be hard on the cache and waste memory. the  Setting `count` to ~10x the number of objects in the space is probably a good starting point. Tune from there if necessary. By default, `dim` is 100.0, and `count` is 1000. The new demo program has a visualizer for the static hash. You can use this to get a feel for how to size things up against the spatial hash.
 
-{{{void cpSpaceRehashStatic(cpSpace *space)}}}
+{{{
+void cpSpaceRehashStatic(cpSpace *space)
+}}}
 
  Rehashes the shapes in the static spatial hash. You only need to call this if you move any static shapes.
 

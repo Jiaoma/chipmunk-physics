@@ -74,10 +74,14 @@ void cpShapeFree(cpShape *shape)
 
 ==Shape Operations:==
 
-{{{cpBB cpShapeCacheBB(cpShape *shape)}}}
+{{{
+cpBB cpShapeCacheBB(cpShape *shape)
+}}}
  Updates and returns the bounding box of `shape`.
 
-{{{void cpResetShapeIdCounter(void)}}}
+{{{
+void cpResetShapeIdCounter(void)
+}}}
  Chipmunk keeps a counter so that every new shape is given a unique hash value to be used in the spatial hash. Because this affects the order in which the collisions are found and handled, you should reset the shape counter every time you populate a space with new shapes. If you don't, there might be (very) slight differences in the simulation.
 
 =cpShape Types:=
