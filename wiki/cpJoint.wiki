@@ -4,9 +4,9 @@ A constraint is something that describes how two bodies interact with each other
 
 ==What constraints are and what they are not==
 
-Constraints in Chipmunk are all velocity based constraints. This means that they act primarily by synchronizing the velocity of two bodies. A pivot joint holds two anchor points on two separate bodies together by defining equations that say that the velocity of the anchor points must be the same and calculating impulses to apply to the bodies to try and keep it that way. A constraint takes a velocity as it's primary input and produces a velocity change as it's output. 
+Constraints in Chipmunk are all velocity based constraints. This means that they act primarily by synchronizing the velocity of two bodies. A pivot joint holds two anchor points on two separate bodies together by defining equations that say that the velocity of the anchor points must be the same and calculating impulses to apply to the bodies to try and keep it that way. A constraint takes a velocity as it's primary input and produces a velocity change as it's output. Some constraints, (joints in particular) apply velocity changes to correct differences in positions. More about this in the next section.
 
-A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. TODO: finish
+A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. A spring is a 
 
 ==Error correction by Feedback==
 
