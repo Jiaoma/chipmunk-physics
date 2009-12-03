@@ -10,7 +10,7 @@ A collision handler is a set of 4 function callbacks for the different collision
 * *Post Solve:* Two shapes are touching and their collision response has been processed. You can retrieve the collision force at this time if you want to use it to calculate sound volumes or damage amounts.
 * *Separate:* Two shapes have just stopped touching for the first time this frame.
 
-Collision callbacks are closely associated with [cpArbiter]s. You should familiarize yourself with that as well.
+Collision callbacks are closely associated with [cpArbiter] structs. You should familiarize yourself with those as well.
 
 *Note:* Shapes tagged as sensors (cpShape.sensor == true) never generate collisions that get processed so collisions between sensors shapes and other shapes will never call the post solve callback. They still generate begin, and separate callbacks, and the pre solve callback is also called every frame even though there is no real collision.
 
