@@ -18,11 +18,15 @@ TODO: stub
 
 =API:=
 
+==Video Tour of Current Joint Types==
+
+<wiki:video url="http://www.youtube.com/watch?v=ZgJJZTS0aMM"/>
+
 ==Shared Memory Management Functions:==
 
 {{{
-void cpJointDestroy(cpJoint *joint)
-void cpJointFree(cpJoint *joint)
+void cpConstraintDestroy(cpConstraint *constraint)
+void cpConstraintFree(cpConstraint *constraint)
 }}}
 
  `Destroy` and `Free` functions are shared by all joint types. Allocation and initialization functions are specific to each joint type.
@@ -34,42 +38,159 @@ void cpJointFree(cpJoint *joint)
 {{{
 cpPinJoint *cpPinJointAlloc(void)
 cpPinJoint *cpPinJointInit(cpPinJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
-cpJoint *cpPinJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+cpConstraint *cpPinJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
 }}}
 
- `a` and `b` are the two bodies to connect, and `anchr1` and `anchr2` are the anchor points on those bodies.
+ `a` and `b` are the two bodies to connect, and `anchr1` and `anchr2` are the anchor points on those bodies. The distance between the two anchor points is measured when the joint is created.
+
+ Properties:
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || Dist ||
 
 ==Slide Joints:==
 
 {{{
 cpSlideJoint *cpSlideJointAlloc(void)
 cpSlideJoint *cpSlideJointInit(cpSlideJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
-cpJoint *cpSlideJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
+cpConstraint *cpSlideJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
 }}}
 
  `a` and `b` are the two bodies to connect, `anchr1` and `anchr2` are the anchor points on those bodies, and `min` and `max` define the allowed distances of the anchor points.
+
+ Properties:
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || Min ||
+|| cpFloat || Max ||
 
 ==Pivot Joints:==
 
 {{{
 cpPivotJoint *cpPivotJointAlloc(void)
 cpPivotJoint *cpPivotJointInit(cpPivotJoint *joint, cpBody *a, cpBody *b, cpVect pivot)
-cpJoint *cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot)
+cpConstraint *cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot)
+cpConstraint *cpPivotJointNew2(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
 }}}
 
- `a` and `b` are the two bodies to connect, and `pivot` is the point in world coordinates of the pivot. Because the pivot location is given in world coordinates, you must have the bodies moved into the correct positions already.
+ `a` and `b` are the two bodies to connect, and `pivot` is the point in world coordinates of the pivot. Because the pivot location is given in world coordinates, you must have the bodies moved into the correct positions already. Alternatively you can specify the joint based on a pair of anchor points, but make sure you have the bodies in the right place as the joint will fix itself as soon as you start simulating the space.
+
+ Properties:
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
 
 ==Groove Joint:==
 
 {{{
 cpGrooveJoint *cpGrooveJointAlloc(void)
 cpGrooveJoint *cpGrooveJointInit(cpGrooveJoint *joint, cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
-cpJoint *cpGrooveJointNew(cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
+cpConstraint *cpGrooveJointNew(cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
 }}}
 
- The groove goes from _groov_a_ to _groove_b_ on body _a_, and the pivot is attached to _anchr2_ on body _b_. All coordinates are body local.
+ The groove goes from `groov_a` to `groove_b` on body `a`, and the pivot is attached to `anchr2` on body `b`. All coordinates are body local.
+
+ Properties:
+|| Type || Name ||
+|| cpVect || Anchr2 ||
+
+==Damped Spring:==
+
+{{{
+cpDampedSpring *cpDampedSpringAlloc(void)
+cpDampedSpring *cpDampedSpringInit(cpDampedSpring *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat restLength, cpFloat stiffness, cpFloat damping)
+cpConstraint *cpDampedSpringNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat restLength, cpFloat stiffness, cpFloat damping)
+}}}
+
+ Defined much like a slide joint. `restLength` is the distance the spring wants to be, `stiffness` is the spring constant ([http://en.wikipedia.org/wiki/Young's_modulus Young's modulus]), and `damping` is how soft to make the damping of the spring.
+
+ Properties:
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || RestLength ||
+|| cpFloat || Stiffness ||
+|| cpFloat || Damping ||
+
+==Damped Rotary Spring:==
+
+{{{
+cpDampedRotarySpring *cpDampedRotarySpringAlloc(void)
+cpDampedRotarySpring *cpDampedRotarySpringInit(cpDampedRotarySpring *joint, cpBody *a, cpBody *b, cpFloat restAngle, cpFloat stiffness, cpFloat damping)
+cpConstraint *cpDampedRotarySpringNew(cpBody *a, cpBody *b, cpFloat restAngle, cpFloat stiffness, cpFloat damping)
+}}}
+
+ Like a damped spring, but works in an angular fashion. `restAngle` is the relative angle in radians that the bodies want to have, `stiffness` and `damping` work basically the same as on a damped spring.
+
+ Properties:
+|| Type || Name ||
+|| cpFloat || RestAngle ||
+|| cpFloat || Stiffness ||
+|| cpFloat || Damping ||
+
+==Rotary Limit Joint:==
+
+{{{
+cpRotaryLimitJoint *cpRotaryLimitJointAlloc(void)
+cpRotaryLimitJoint *cpRotaryLimitJointInit(cpRotaryLimitJoint *joint, cpBody *a, cpBody *b, cpFloat min, cpFloat max)
+cpConstraint *cpRotaryLimitJointNew(cpBody *a, cpBody *b, cpFloat min, cpFloat max)
+}}}
+
+ Constrains the relative rotations of two bodies. `min` and `max` are the angular limits in radians. It is implemented so that it's possible to for the range to be greater than a full revolution.
+
+ Properties:
+|| Type || Name ||
+|| cpFloat || Min ||
+|| cpFloat || Max ||
+
+==Ratchet Joint:==
+
+{{{
+cpRatchetJoint *cpRatchetJointAlloc(void);
+cpRatchetJoint *cpRatchetJointInit(cpRatchetJoint *joint, cpBody *a, cpBody *b, cpFloat phase, cpFloat ratchet);
+cpConstraint *cpRatchetJointNew(cpBody *a, cpBody *b, cpFloat phase, cpFloat ratchet);
+}}}
+
+ Works like a socket wrench. `ratchet` is the distance between "clicks", `phase` is the initial offset to use when deciding where the ratchet angles are.
+
+ Properties:
+|| Type || Name ||
+|| cpFloat || Angle ||
+|| cpFloat || Phase ||
+|| cpFloat || Ratchet ||
+
+==Gear Joint:==
+
+{{{
+cpGearJoint *cpGearJointAlloc(void);
+cpGearJoint *cpGearJointInit(cpGearJoint *joint, cpBody *a, cpBody *b, cpFloat phase, cpFloat ratio);
+cpConstraint *cpGearJointNew(cpBody *a, cpBody *b, cpFloat phase, cpFloat ratio);
+}}}
+
+ Keeps the angular velocity ratio of a pair of bodies constant. `ratio` is always measured in absolute terms. It is currently not possible to set the ratio in relation to a third body's angular velocity. `phase` is the initial angular offset of the two bodies.
+
+ Properties:
+|| Type || Name ||
+|| cpFloat || Phase ||
+|| cpFloat || Ratio ||
+
+==Simple Motor:==
+
+{{{
+cpSimpleMotor *cpSimpleMotorAlloc(void);
+cpSimpleMotor *cpSimpleMotorInit(cpSimpleMotor *joint, cpBody *a, cpBody *b, cpFloat rate);
+cpConstraint *cpSimpleMotorNew(cpBody *a, cpBody *b, cpFloat rate);
+}}}
+
+ Keeps the relative angular velocity of a pair of bodies constant. `rate` is the desired relative angular velocity. You will usually want to set an force (torque) maximum for motors as otherwise they will be able to apply a nearly infinite torque to keep the bodies moving.
+
+ Properties:
+|| Type || Name ||
+|| cpFloat || Rate ||
 
 =Notes:=
 
- * You can add multiple joints between two bodies, but make sure that they don't fight. It can cause the bodies to explode.
+ * You can add multiple joints between two bodies, but make sure that they don't fight. It can cause the bodies move or spin violently.
  * Make sure you add both of the connected bodies and the joint to a space.
