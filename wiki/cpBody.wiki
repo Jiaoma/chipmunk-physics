@@ -116,13 +116,13 @@ void cpBodySetMass(cpBody *body, cpFloat mass)
 ==Applying Forces and Torques==
 
 {{{void cpBodyApplyImpulse(cpBody *body, cpVect j, cpVect r)}}}
- Apply the impulse `j` to `body` at a relative offset `r` from the center of gravity. Both `r` and `j` are in world coordinates.
+ Apply the impulse `j` to `body` at a *relative offset (important!)* `r` from the center of gravity. Both `r` and `j` are in world coordinates.
 
 {{{void cpBodyResetForces(cpBody *body)}}}
  Zero both the forces and torques accumulated on `body`.
 
 {{{void cpBodyApplyForce(cpBody *body, cpVect f, cpVect r)}}}
- Apply (accumulate) the force `f` on `body` at a relative offset `r` from the center of gravity. Both `r` and `f` are in world coordinates.
+ Apply (accumulate) the force `f` on `body` at a *relative offset (important!)* `r` from the center of gravity. Both `r` and `f` are in world coordinates.
 
 {{{void cpApplyDampedSpring(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat rlen, cpFloat k, cpFloat dmp, cpFloat dt)}}}
  Apply a spring force between bodies `a` and `b` at anchors `anchr1` and `anchr2` respectively. `k` is the spring constant ([http://en.wikipedia.org/wiki/Young's_modulus Young's modulus]), `rlen` is the rest length of the spring, `dmp` is the damping constant (force/velocity), and `dt` is the time step to apply the force over. *Note:* _not solving the damping forces in the impulse solver causes problems with large damping values. There is a new constraint type cpDampedSpring that should be used instead._
