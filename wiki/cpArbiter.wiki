@@ -8,6 +8,8 @@ Originally arbiters were going to be an internal data type that Chipmunk used th
 
 ==Struct Definitions==
 
+It's unlikely that you'll need to interact with a cpArbiter struct directly as the collision helper functions should provide most functionality that people will need. One exception is the `e`, and `u` fields. By default, Chipmunk multiplies the friction and elasticity values of to shapes together to determine what values to use when solving the collision. This mostly works, but in many cases is simply not flexible enough. If you are running into problems with that, you can change the values calculated for `e` and `u` in a preSolve callback.
+
 {{{
 typedef struct cpArbiter{
 	// Information on the contact points between the objects.
@@ -33,7 +35,6 @@ typedef struct cpArbiter{
 	struct cpCollisionHandler *handler;
 } cpArbiter
 }}}
- It's unlikely that you'll need to interact with a cpArbiter struct directly as the collision helper functions should provide most functionality that people will need. One exception is the `e`, and `u` fields. By default, Chipmunk multiplies the friction and elasticity values of to shapes together to determine what values to use when solving the collision. This mostly works, but in many cases is simply not flexible enough. If you are running into problems with that, you can change the values calculated for `e` and `u` in a preSolve callback.
 
 {{{
 typedef struct cpContact {
