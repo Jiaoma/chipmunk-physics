@@ -4,7 +4,40 @@
 
 First of all, why are they called arbiters? The short answer is that Box2D called them that way back in the day when I was looking at the source for it before it came the Box2D physics engine. An arbiter is like a judge, a person that has authority to  settle disputes between two people. It was a fun name and was shorter to type than CollisionPair. :p
 
-Originally arbiters were going to be an internal data type that Chipmunk used that would have no real use to anybody externally. In Chipmunk 4.x and earlier, only a single callback hook was provided for handling collision events that was triggered every step that to shapes were touching. This made it non-trivial to track when objects started and stopped touching as the user would have to record and process this separately. Many people, including myself, wanted to get collision begin/separate events and eventually I realized that information was already being stored in the arbiter cache that the 
+Originally arbiters were going to be an internal data type that Chipmunk used that would have no real use to anybody externally. In Chipmunk 4.x and earlier, only a single callback hook was provided for handling collision events that was triggered every step that to shapes were touching. This made it non-trivial to track when objects started and stopped touching as the user would have to record and process this separately. Many people, including myself, wanted to get collision begin/separate events and eventually I realized that information was already being stored in the arbiter cache that the Chipmunk maintains. With some changes to the collision callback API, that information is now exposed to the user. Internally, arbiters are used primarily for solving collision impulses. To external users, you can simply think of them as a weird type used in collision callbacks.
+
+==Memory Management==
+
+You should never need to create an arbiter, nor will you ever need to free one as they are handled by the space. More importantly, because they are handled by the space you should never hold onto a reference to an arbiter as you don't know when they will be destroyed. Use them within the callback where they are given to you and then forget about them or copy out the information you need from them.
+
+==Helper Functions==
+
+{{{
+void cpArbiterGetShapes(cpArbiter *arb, cpShape **a, cpShape **b)
+#define CP_ARBITER_GET_SHAPES(arb, a, b) cpShape *a, *b; cpArbiterGetShapes(arb, &a, &b);
+}}}
+ Get the shapes in the order that they were defined in the collision handler associated with this arbiter. If you defined the handler as `cpSpaceAddCollisionHandler(space, 1, 2, ...)`, you you will find that `a->collision_type == 1` and `b->collision_type == 2`. The convenience macro defines and initializes the two shape variables for you.
+
+{{{
+int cpArbiterIsFirstContact(cpArbiter *arb)
+}}}
+ Returns true if this is the first step that an arbiter existed. You can use this from preSolve and postSolve to know if a collision between two shapes is new without needing to flag a boolean in your begin callback.
+
+{{{
+cpVect cpArbiterGetNormal(cpArbiter *arb, int i)
+}}}
+ Returns the collision normal for the i'th contact point, flipping it if necessary. *Note:* Currently due to how Chipmunk's collision detection is implemented, the collision normals will be the same for all collision points. You can simply do `cpArbiterGetNormal(arb, 0)` and not have to check each contact point.
+
+{{{
+cpVect cpArbiterGetPoint(cpArbiter *arb, int i)
+}}}
+ Returns the position of the i'th collision point.
+
+{{{
+cpVect cpArbiterTotalImpulse(cpArbiter *arb);
+cpVect cpArbiterTotalImpulseWithFriction(cpArbiter *arb);
+}}}
+ Returns the impulse that was applied this step to resolve the collision. Calling this function outside of a postStep callback function is undefined. Enabling elastic iterations will cause you to get incorrect results, this is a known bug.
 
 ==Struct Definitions==
 
@@ -44,37 +77,3 @@ typedef struct cpContact {
 	cpFloat dist;
 } cpContact
 }}}
-
-
-==Memory Management==
-
-You should never need to create an arbiter, nor will you ever need to free one as they are handled by the space. More importantly, because they are handled by the space you should never hold onto a reference to an arbiter as you don't know when they will be destroyed. Use them within the callback where they are given to you and then forget about them or copy out the information you need from them.
-
-==Helper Functions==
-
-{{{
-void cpArbiterGetShapes(cpArbiter *arb, cpShape **a, cpShape **b)
-#define CP_ARBITER_GET_SHAPES(arb, a, b) cpShape *a, *b; cpArbiterGetShapes(arb, &a, &b);
-}}}
- Get the shapes in the order that they were defined in the collision handler associated with this arbiter. If you defined the handler as `cpSpaceAddCollisionHandler(space, 1, 2, ...)`, you you will find that `a->collision_type == 1` and `b->collision_type == 2`. The convenience macro defines and initializes the two shape variables for you.
-
-{{{
-int cpArbiterIsFirstContact(cpArbiter *arb)
-}}}
- Returns true if this is the first step that an arbiter existed. You can use this from preSolve and postSolve to know if a collision between two shapes is new without needing to flag a boolean in your begin callback.
-
-{{{
-cpVect cpArbiterGetNormal(cpArbiter *arb, int i)
-}}}
- Returns the collision normal for the i'th contact point, flipping it if necessary. *Note:* Currently due to how Chipmunk's collision detection is implemented, the collision normals will be the same for all collision points. You can simply do `cpArbiterGetNormal(arb, 0)` and not have to check each contact point.
-
-{{{
-cpVect cpArbiterGetPoint(cpArbiter *arb, int i)
-}}}
- Returns the position of the i'th collision point.
-
-{{{
-cpVect cpArbiterTotalImpulse(cpArbiter *arb);
-cpVect cpArbiterTotalImpulseWithFriction(cpArbiter *arb);
-}}}
- Returns the impulse that was applied this step to resolve the collision. Calling this function outside of a postStep callback function is undefined. Enabling elastic iterations will cause you to get incorrect results, this is a known bug.
