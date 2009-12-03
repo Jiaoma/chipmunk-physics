@@ -6,21 +6,47 @@ A constraint is something that describes how two bodies interact with each other
 
 Constraints in Chipmunk are all velocity based constraints. This means that they act primarily by synchronizing the velocity of two bodies. A pivot joint holds two anchor points on two separate bodies together by defining equations that say that the velocity of the anchor points must be the same and calculating impulses to apply to the bodies to try and keep it that way. A constraint takes a velocity as it's primary input and produces a velocity change as it's output. Some constraints, (joints in particular) apply velocity changes to correct differences in positions. More about this in the next section.
 
-A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. A spring is a 
+A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. If a spring is not a constraint, then why do I have two varieties of spring constraints you ask? The reason is because they are _damped springs_. The damping associated with the spring is a true constraint that creates velocity changes based on the relative velocities of the two bodies it links. As it is convenient to put a damper and a spring together most of the time, I figured I might as well just apply the spring force as part of the constraint instead of having a damper constraint and having the user calculate and apply their own spring forces separately. 
 
 ==Error correction by Feedback==
 
-TODO: stub
+Joints in Chipmunk are not perfect. A pin joint can't maintain the exact correct distance between it's anchor points, nor can a pivot joint hold it's anchor points completely together. Instead, they are designed to deal with this by correcting themselves over time. In Chipmunk v5.x, you have a fair amount of extra control over how joints correct themselves and can even use this ability to create physical effects that allow you to use joints in new ways:
+
+  * Servo motors - Ex: open/close doors or rotate things without going over a maximum force.
+  * Winches - Pull one object towards another at a constant speed without going over a maximum force.
+  * Mouse manipulation - Interact with objects smoothly given course/shaky mouse input.
+
+There are three public fields of cpConstraint structs that control the error correction, `maxForce`, `maxBias`, and `biasCoef`. `maxForce` is pretty self explanatory, a joint or constraint will not be able to use more than this amount of force in order to function. If it needs more force to be able to hold itself together, it will fall apart. `maxBias` is the maximum speed at which error correction can be applied. If you change a property on a joint so that the joint will have to correct itself, it normally does so very quickly. By setting a maxSpeed you can make the joint work like a servo, correcting itself at a constant rate over a longer period of time. Lastly, `biasCoef` is the percentage of error corrected every step before clamping to a maximum speed. You can use this to make joints correct themselves smoothly instead of at a constant speed, but is probably the least useful of the three properties by far.
 
 ==Constraints and Collision Shapes==
 
-TODO: stub
+Neither constraints or collision shapes have any knowledge of the other. When connecting joints to a body the anchor points don't need to be inside of any shapes attached to the body and it often makes sense that they shouldn't. Also, adding a constraint between two bodies doesn't prevent their collision shapes from colliding. In fact, this is the primary reason that the collision group property exists.
 
 =API:=
 
 ==Video Tour of Current Joint Types==
 
 <wiki:video url="http://www.youtube.com/watch?v=ZgJJZTS0aMM"/>
+
+==`cpConstraint` struct==
+
+{{{
+typedef struct cpConstraint {
+	cpBody *a, *b;
+	cpFloat maxForce;
+	cpFloat biasCoef;
+	cpFloat maxBias;
+	
+	cpDataPointer data;
+} cpConstraint
+}}}
+
+  * `a` and `b` are the two bodies the constraint acts on.
+  * `maxForce` is the maximum force that the constraint can use to act on the two bodies. Defaults to INFINITY.
+  * `biasCoef` is the percentage of error corrected each step of the space. (Can cause issues if you don't use a constant time step) Defaults to 0.1.
+  * `maxBias` is the maximum speed at which the constraint can apply error correction. Defaults to INFINITY.
+
+To access properties of specific joint types, use the getter and setter functions provided (ex: `cpPinJointGetAnchr1()`). See the lists of properties for more information.
 
 ==Shared Memory Management Functions:==
 
