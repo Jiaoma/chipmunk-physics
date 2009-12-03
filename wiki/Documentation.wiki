@@ -99,6 +99,6 @@ To represent vectors, Chipmunk defines the [cpVect] type and a set of inline fun
 
 =Links=
 
- * [http://files.slembcke.net/chipmunk/tutorials/MoonBuggyTutorial.tar.gz Moon Buggy tutorial] - A small tutorial
- * [http://www.slembcke.net/forums/viewforum.php?f=1 Forum] - The official forum
+ * [http://www.slembcke.net/forums/viewforum.php?f=1] - The official forum
  * [Games] - A list of games done with Chipmunk
+ * [BindingsAndPorts] - A list of bindings and ports of Chipmunk to other languages.
