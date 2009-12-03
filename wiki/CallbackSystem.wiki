@@ -71,7 +71,7 @@ Post step callbacks are registered as a function and a pointer to an object used
 
 ==Callbacks Example==
 
-Here is a short example showing how to use collision handlers and post step callbacks together:
+Here is a short example showing how to use collision handlers and post step callbacks together to remove an object when it touches another:
 {{{
 static void
 postStepRemove(cpSpace *space, cpShape *shape, void *unused)
