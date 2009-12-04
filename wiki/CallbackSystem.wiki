@@ -37,7 +37,9 @@ void cpSpaceAddCollisionHandler(
 
 Add a collision handler for given collision type pair. Whenever a shapes with collision_type `a` and collision_type `b` collide, these callbacks will be used to process the collision. `data` is a user definable context pointer that is passed to each of the callbacks. NULL can be provided for callbacks you do not wish to implement, however Chipmunk will call it's own default versions for these and not the default ones you've set up for the space. If you need to fall back on the space's default callbacks, you'll have to provide them individually to each handler definition.
 
-{{{void cpSpaceRemoveCollisionHandler(cpSpace *space, cpCollisionType a, cpCollisionType b)}}}
+{{{
+void cpSpaceRemoveCollisionHandler(cpSpace *space, cpCollisionType a, cpCollisionType b)
+}}}
  Remove a collision handler for a given collision type pair.
 
 {{{
