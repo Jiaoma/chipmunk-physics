@@ -8,7 +8,9 @@ Chipmunk currently supports two kinds of spatial queries, segment and point. Eit
 
 Point queries are useful for things like mouse picking and simple sensors.
 
-{{{int cpShapePointQuery(cpShape *shape, cpVect p)}}}
+{{{
+int cpShapePointQuery(cpShape *shape, cpVect p)
+}}}
  Check if the given point lies within the shape.
 
 {{{
@@ -17,7 +19,9 @@ void cpSpacePointQuery(cpSpace *space, cpVect point, cpLayers layers, cpGroup gr
 }}}
  Query `space` at `point` filtering out matches with the given `layers` and `group`. `func` is called for each shape found along with the `data` argument passed to `cpSpacePointQuery()`.
 
-{{{cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpGroup group)}}}
+{{{
+cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, cpGroup group)
+}}}
  Query `space` at `point` and return the first shape found matching the given `layers` and `group`. Returns `NULL` if no shape was found.
 
 ==Segment Queries==
@@ -33,8 +37,10 @@ typedef struct cpSegmentQueryInfo{
 }}}
  Segment queries return more information than just a simple yes or no, they also return where a shape was hit and it's surface normal at the hit point. `t` is the percentage between the query start and end points. If you need the hit point in world space or the absolute distance from start, see the segment query helper functions later.
 
-{{{int cpShapeSegmentQuery(cpShape *shape, cpVect a, cpVect b, cpSegmentQueryInfo *info)}}}
- Check if the line segment from `a` to `b` intersects the shape. `info` must be a valid pointer to a `cpSegmentQueryInfo` structure which will be initialized if the line segment intersects.
+{{{
+int cpShapeSegmentQuery(cpShape *shape, cpVect a, cpVect b, cpSegmentQueryInfo *info)
+}}}
+ Check if the line segment from `a` to `b` intersects the shape. `info` must be a valid pointer to a `cpSegmentQueryInfo` structure which will be initialized with the raycast info.
 
 {{{
 typedef void (*cpSpaceSegmentQueryFunc)(cpShape *shape, cpFloat t, cpVect n, void *data)
@@ -42,15 +48,21 @@ int cpSpaceSegmentQuery(cpSpace *space, cpVect start, cpVect end, cpLayers layer
 }}}
   Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. `func` is called with the normalized distance along the line and surface normal for each shape found along with the `data` argument passed to `cpSpacePointQuery()`.
 
-{{{cpShape *cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSegmentQueryInfo *out)}}}
- Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. Only the first shape encountered is returned and the search is short circuited. Returns `NULL` if no shape was found.
+{{{
+cpShape *cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers layers, cpGroup group, cpSegmentQueryInfo *info)
+}}}
+ Query `space` along the line segment from `start` to `end` filtering out matches with the given `layers` and `group`. Only the first shape encountered is returned and the search is short circuited. Returns `NULL` if no shape was found. The info struct pointed to by `info` will be initialized with the raycast info unless `info` is NULL.
 
 ===Segment Query Helper Functions===
 
-{{{cpVect cpSegmentQueryHitPoint(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
+{{{
+cpVect cpSegmentQueryHitPoint(cpVect start, cpVect end, cpSegmentQueryInfo info)
+}}}
  Return the hit point in world coordinates where the segment first intersected with the shape.
 
-{{{cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)}}}
+{{{
+cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)
+}}}
  Return the absolute distance where the segment first hit the shape.
 
 ==Examples==
