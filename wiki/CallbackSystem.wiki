@@ -41,7 +41,7 @@ Add a collision handler for given collision type pair. Whenever a shapes with co
  Remove a collision handler for a given collision type pair.
 
 {{{
-void cpSpaceSetDefaultCollisionPairFunc(
+void cpSpaceSetDefaultCollisionHandler(
 	cpSpace *space,
 	cpCollisionType a, cpCollisionType b,
 	cpCollisionBeginFunc begin,
