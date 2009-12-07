@@ -2,7 +2,7 @@ http://files.slembcke.net/chipmunk/logo/logo1_med.png
 
 =Chipmunk Physics=
 
-*Note:* The documentation on this wiki is meant to be used with the trunk code which should be released as v5.0 shortly.
+*Note:* The documentation on this wiki documents Chipmunk v5.0.0. 
 
 First of all, Chipmunk is a 2D rigid body physics library distributed under the MIT license. Though not yet complete, it is intended to be fast, numerically stable, and easy to use. I've put hundreds of hours of work into making Chipmunk what it is today. If you find Chipmunk has saved you a lot of time, please consider [http://code.google.com/p/chipmunk-physics/#Donate: donating]. You'll make an indie game developer very happy.
 
