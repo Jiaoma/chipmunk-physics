@@ -30,5 +30,6 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.chaoticbox.com/pinch_n_pop.php Pinch 'n Pop] - Looks very well polished, but is hard to describe the gameplay in words. You must check out the gameplay video!
  * [http://www.chaoticbox.com/pollywog.php Pollywog] - Another great looking game by Chaotic Box.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=294850556&mt=8 Pachinko Puzzle] - Similar to the old mechanical handheld games that dropped balls from the top. You must hit all pegs with a certain number of marbles in a certain amount of time.
+ * [http://itunes.apple.com/us/app/twiddle/id317852089?mt=8 Twiddle] - Pong based word game.
 
 If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list. I know that there are a lot missing.
