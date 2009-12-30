@@ -2,7 +2,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
 
 ==PC/Mac/Linux==
 
- * [http://howlingmoonsoftware.com/scribball.shtml ScribBall] - A physics twist on the old color matching genre. Made by a friend and myself. (Mac only)
+ * [http://howlingmoonsoftware.com/scribball.shtml Crayon Ball] - A physics twist on the old color matching genre. Made by a friend and myself. (Mac/PC)
  * [http://www.batteryacid.org/biofilm/ Biofilm] - RTS based around bacteria. (Mac only)
  * [http://ec.silverspherestudios.com/ Eternity's Child] - Platformer with comic book inspired graphics. With a WiiWare port of the game, it's possible Chipmunk has made it's way onto consoles! (PC only)
  * [http://xmoto.tuxfamily.org/ XMoto] - While the core of the game uses ODE, the next version will use Chipmunk to simulate boxes and other items to interact with. (PC/Mac/Linux)
@@ -10,13 +10,14 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.zanydoodle.com/ Zany Doodle] - A physics sandbox game similar to Crayon Physics. [http://www.youtube.com/results?search_query=zany+doodle&search_type=&aq=f YouTube videos]
  * [http://www.gnadegames.com/toygame.php The Magic Toy Chest] - Physics based puzzle game. Looks a lot like The Incredible Machine. (PC only)
 
-==PSP==
- * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker] - Make towers and then knock them over for points.
- * [http://beyondds.free.fr/index.php?2008/07/07/70-antitetris-10 Anti-Tetris] A comical (IMO) twist on Tetris. I'd love to see the surprise on a hardened Tetris veteran's face when handed that game. :D
+==PSP/DS Homebrew==
+ * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker] - Make towers and then knock them over for points. (PSP)
+ * [http://beyondds.free.fr/index.php?2008/07/07/70-antitetris-10 Anti-Tetris] A comical (IMO) twist on Tetris. I'd love to see the surprise on a hardened Tetris veteran's face when handed that game. :D (PSP)
+ * [http://www.boive.fr/Jeux/Homebrews-DS/Brix-DS.html Brix DS] - Controlled tower toppling game.
 
 ==iPhone==
 
- * [http://howlingmoonsoftware.com/iPhoneScribBall.shtml ScribBall] - Real-time physics based puzzle game. (Made by yours truly)
+ * [http://howlingmoonsoftware.com/iPhoneScribBall.shtml Crayon Ball] - Real-time physics based puzzle game. (Made by yours truly)
  * [http://howlingmoonsoftware.com/twilightGolf.php Twilight Golf] - Another physics puzzler made by me featuring realtime dynamic shadows running on the iPhone!
  * [http://fingerphysics.com/ Finger Physics] - A great looking physics puzzler.
  * [http://www.inmotionsoftware.com/AppsGames/IDigIt.html I Dig It] - #1 app for a while. An exploration game with some Dig Dug vibes to it.
