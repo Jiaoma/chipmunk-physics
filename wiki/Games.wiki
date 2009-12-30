@@ -17,12 +17,16 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
 ==iPhone==
 
  * [http://howlingmoonsoftware.com/iPhoneScribBall.shtml ScribBall] - Real-time physics based puzzle game. (Made by yours truly)
+ * [http://fingerphysics.com/ Finger Physics] - A great looking physics puzzler.
+ * [http://www.inmotionsoftware.com/AppsGames/IDigIt.html I Dig It] - #1 app for a while. An exploration game with some Dig Dug vibes to it.
+ * [http://www.inmotionsoftware.com/AppsGames/DungeonDefense.html DungeonDefense] - A tower defense like game from the makers of I Dig It.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=285947378&mt=8 Hangman Sim] - Simple Hangman game with an interactive hangman doll.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=290661843&mt=8 Athletics] - Simple racing game.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=289771175&mt=8 iSplume] - Snood clone with physics.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=288297101&mt=8 Micro Labyrinth] - Simple Labyrinth game.
  * [http://weelittlegamer.com/ WeeLittleGamer.com] Has a number of simple games designed for younger audiences. Chipmunk is used in several of them.
- * [http://www.chaoticbox.com/pinch_n_pop.php Pinch 'n Pop] Looks very well polished, but is hard to describe the gameplay in words. You must check out the gameplay video!
+ * [http://www.chaoticbox.com/pinch_n_pop.php Pinch 'n Pop] - Looks very well polished, but is hard to describe the gameplay in words. You must check out the gameplay video!
+ * [http://www.chaoticbox.com/pollywog.php Pollywog] - Another great looking game by Chaotic Box.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=294850556&mt=8 Pachinko Puzzle] - Similar to the old mechanical handheld games that dropped balls from the top. You must hit all pegs with a certain number of marbles in a certain amount of time.
 
-If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list.
+If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list. I know that there are a lot missing.
