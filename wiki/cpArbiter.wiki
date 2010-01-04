@@ -2,7 +2,7 @@
 
 =Chipmunk Collision Pairs: `cpArbiter`=
 
-First of all, why are they called arbiters? The short answer is that Box2D called them that way back in the day when I was looking at the source for it before it came the Box2D physics engine. An arbiter is like a judge, a person that has authority to  settle disputes between two people. It was a fun name and was shorter to type than CollisionPair. :p
+First of all, why are they called arbiters? The short answer is that Box2D called them that way back in the day when I was looking at the source for it before it came the Box2D physics engine. An arbiter is like a judge, a person that has authority to  settle disputes between two people. It was a fun name and was shorter to type than !CollisionPair. :p
 
 Originally arbiters were going to be an internal data type that Chipmunk used that would have no real use to anybody externally. In Chipmunk 4.x and earlier, only a single callback hook was provided for handling collision events that was triggered every step that to shapes were touching. This made it non-trivial to track when objects started and stopped touching as the user would have to record and process this separately. Many people, including myself, wanted to get collision begin/separate events and eventually I realized that information was already being stored in the arbiter cache that the Chipmunk maintains. With some changes to the collision callback API, that information is now exposed to the user. Internally, arbiters are used primarily for solving collision impulses. To external users, you can simply think of them as a weird type used in collision callbacks.
 
