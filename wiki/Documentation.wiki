@@ -94,7 +94,7 @@ To represent vectors, Chipmunk defines the [cpVect] type and a set of inline fun
  * [cpSpace] -  Create a "space" to put your objects into and simulate them.
  * [cpConstraint] - Create joints and other constraints.
  * Learn about how CollisionDetection in Chipmunk works.
- * Learn about Chipmunk's CallbackSystem for recieving collision events and adding custom behavior to your physics.
+ * Learn about Chipmunk's CallbackSystem and [cpArbiter] struct for recieving collision events and adding custom behavior to your physics.
  * Learn about [Queries]. Point queries and segment queries (raycasting).
 
 =Links=
