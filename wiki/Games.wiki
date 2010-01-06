@@ -31,6 +31,9 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.chaoticbox.com/pollywog.php Pollywog] - Another great looking game by Chaotic Box.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=294850556&mt=8 Pachinko Puzzle] - Similar to the old mechanical handheld games that dropped balls from the top. You must hit all pegs with a certain number of marbles in a certain amount of time.
  * [http://itunes.apple.com/us/app/twiddle/id317852089?mt=8 Twiddle] - Pong based word game.
+ * [http://www.4iphone4.me/BallDizzy/ Ball Dizzy] - Pool-like arcade game.
+ * [http://www.4iphone4.me/AirportMadness/ Airport Madness] - Arcade balancing game.
+ * [http://seraphimsscepter.com/ Seraphim's Scepter] - Polished looking breakout clone.
  * Chipmunk is included with the [http://code.google.com/p/cocos2d-iphone/ Cocos 2D] game engine, so I'm sure there are a lot of iPhone games out there using it!
 
 If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list. I know that there are a lot missing.
