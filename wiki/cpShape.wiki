@@ -61,7 +61,7 @@ typedef struct cpShape{
  * `layers`: Shapes only collide if they are in the same bit-planes. i.e. `(a->layers & b->layers) != 0` By default, a shape occupies all 32 bit-planes.
  * `data`: A user definable field.
  * `body`: The rigid body the shape is attached to.
- * `e`: Elasticity of the shape. A value of 0.0 gives no bounce, while a value of 1.0 will give a "perfect" bounce. However due to inaccuracies in the simulation using 1.0 or greater is not recommended however. _See the notes at the end of the section._
+ * `e`: Elasticity of the shape. A value of 0.0 gives no bounce, while a value of 1.0 will give a "perfect" bounce. However due to inaccuracies in the simulation using 1.0 or greater is not recommended. _See the notes at the end of the section._
  * `u`: Friction coefficient. Chipmunk uses the Coulomb friction model, a value of 0.0 is frictionless. [http://www.roymech.co.uk/Useful_Tables/Tribology/co_of_frict.htm Tables of friction coefficients]. _See the notes at the end of the section._
  * `surface_v`: The surface velocity of the object. Useful for creating conveyor belts or players that move around. This value is only used when calculating friction, not resolving the collision.
 
@@ -115,7 +115,7 @@ cpShape* cpSegmentShapeNew(cpBody *body, cpVect a, cpVect b, cpFloat radius)
 
 {{{
 cpVect cpSegmentShapeGetA(cpShape *shape)
-cpVect cpSegmentShapeGetA(cpShape *shape)
+cpVect cpSegmentShapeGetB(cpShape *shape)
 cpVect cpSegmentShapeGetNormal(cpShape *shape)
 cpFloat cpSegmentShapeGetRadius(cpShape *shape)
 }}}
