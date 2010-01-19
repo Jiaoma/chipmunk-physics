@@ -19,6 +19,13 @@ void cpArbiterGetShapes(cpArbiter *arb, cpShape **a, cpShape **b)
  Get the shapes in the order that they were defined in the collision handler associated with this arbiter. If you defined the handler as `cpSpaceAddCollisionHandler(space, 1, 2, ...)`, you you will find that `a->collision_type == 1` and `b->collision_type == 2`. The convenience macro defines and initializes the two shape variables for you.
 
 {{{
+void cpArbiterIgnore(cpArbiter *arb)
+}}}
+ Calling this function on an arbiter will cause Chipmunk to ignore the collision tracked by this arbiter until the shapes separate starting on the next call to `cpSpaceStep()`. (The `separate()` callback will still be called) This allows you to reject a collision the same way that a `begin()` callback can.
+
+ <b>NOTE:</b> If you call this function from the `preStep()` callback, it does not reject the collision until the next time step. Make sure you also return `false` if that is what you intended.
+
+{{{
 int cpArbiterIsFirstContact(cpArbiter *arb)
 }}}
  Returns true if this is the first step that an arbiter existed. You can use this from preSolve and postSolve to know if a collision between two shapes is new without needing to flag a boolean in your begin callback.
