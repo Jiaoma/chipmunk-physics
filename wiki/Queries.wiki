@@ -65,12 +65,13 @@ cpFloat cpSegmentQueryHitDist(cpVect start, cpVect end, cpSegmentQueryInfo info)
 }}}
  Return the absolute distance where the segment first hit the shape.
 
+==Bounding Box Queries==
+
 {{{
 typedef void (*cpSpaceBBQueryFunc)(cpShape *shape, void *data);
 void cpSpaceBBQuery(cpSpace *space, cpBB bb, cpLayers layers, cpGroup group, cpSpaceBBQueryFunc func, void *data);
 }}}
  Query `space` over the area of `bb` filtering out matches using the given `layers` and `group`. `func` is called for each shape found along with the `data` argument passed to `cpSpaceBBQuery()`. The bounding box of all shapes passed to the callback overlap the given bounding box, but the shapes themselves might not overlap the box. This function is meant to be an efficient way to find objects in an area, but not a detailed intersection test.
-
 
 ==Examples==
 
