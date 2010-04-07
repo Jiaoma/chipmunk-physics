@@ -28,6 +28,8 @@ cpShape *cpSpacePointQueryFirst(cpSpace *space, cpVect point, cpLayers layers, c
 
 Segment queries are like ray casting, but because Chipmunk uses a spatial hash to process collisions, it cannot process infinitely long queries like a ray. In practice this is still very fast and you don't need to worry too much about the performance as long as you aren't using very long segments for your queries.
 
+If a segment query starts inside of a shape then the result is somewhat undefined. Circles and polygons will not report a collision, and segments will report an incorrect point and normal if they do detect one. You should use a separate point query to determine if you are starting inside of a shape. In most controlled circumstances, this is not an issue however.
+
 {{{
 typedef struct cpSegmentQueryInfo{
 	struct cpShape *shape; // shape that was hit, NULL if no collision
