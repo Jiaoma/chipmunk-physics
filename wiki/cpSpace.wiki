@@ -74,7 +74,7 @@ void cpSpaceRemoveBody(cpSpace *space, cpBody *body)
 void cpSpaceRemoveConstraint(cpSpace *space, cpConstraint *constraint)
 }}}
 
- These functions add and remove shapes, bodies and joints from `space`. See the section on Static Shapes above for an explanation of what a static shape is and how it differs from a normal shape.
+ These functions add and remove shapes, bodies and joints from `space`. See the section on Static Shapes above for an explanation of what a static shape is and how it differs from a normal shape. It is an error to remove anything from the space directly from a collision callback. However, it can be done indirectly from a [http://code.google.com/p/chipmunk-physics/wiki/CallbackSystem#Post_Step_Callbacks post step callback].
 
 ==Spatial Hash Management Functions:==
 
