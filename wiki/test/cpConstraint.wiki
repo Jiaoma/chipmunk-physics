@@ -1,0 +1,222 @@
+=Chipmunk Constraints: `cpConstraint`=
+
+A constraint is something that describes how two bodies interact with each other. (how they constraint each other) Constraints can be simple joints that allow bodies to pivot around each other like the bones in your body, or they can be more abstract like the gear joint or motors.
+
+==What constraints are and what they are not==
+
+Constraints in Chipmunk are all velocity based constraints. This means that they act primarily by synchronizing the velocity of two bodies. A pivot joint holds two anchor points on two separate bodies together by defining equations that say that the velocity of the anchor points must be the same and calculating impulses to apply to the bodies to try and keep it that way. A constraint takes a velocity as it's primary input and produces a velocity change as it's output. Some constraints, (joints in particular) apply velocity changes to correct differences in positions. More about this in the next section.
+
+A spring connected between two bodies is not a constraint. It's very constraint like as it creates forces that affect the velocities of the two bodies, but a spring takes distances as input and produces forces as it's output. If a spring is not a constraint, then why do I have two varieties of spring constraints you ask? The reason is because they are _damped springs_. The damping associated with the spring is a true constraint that creates velocity changes based on the relative velocities of the two bodies it links. As it is convenient to put a damper and a spring together most of the time, I figured I might as well just apply the spring force as part of the constraint instead of having a damper constraint and having the user calculate and apply their own spring forces separately. 
+
+==Error correction by Feedback==
+
+Joints in Chipmunk are not perfect. A pin joint can't maintain the exact correct distance between it's anchor points, nor can a pivot joint hold it's anchor points completely together. Instead, they are designed to deal with this by correcting themselves over time. In Chipmunk v5.x, you have a fair amount of extra control over how joints correct themselves and can even use this ability to create physical effects that allow you to use joints in new ways:
+
+  * Servo motors - Ex: open/close doors or rotate things without going over a maximum force.
+  * Winches - Pull one object towards another at a constant speed without going over a maximum force.
+  * Mouse manipulation - Interact with objects smoothly given course/shaky mouse input.
+
+There are three public fields of cpConstraint structs that control the error correction, `maxForce`, `maxBias`, and `biasCoef`. `maxForce` is pretty self explanatory, a joint or constraint will not be able to use more than this amount of force in order to function. If it needs more force to be able to hold itself together, it will fall apart. `maxBias` is the maximum speed at which error correction can be applied. If you change a property on a joint so that the joint will have to correct itself, it normally does so very quickly. By setting a maxSpeed you can make the joint work like a servo, correcting itself at a constant rate over a longer period of time. Lastly, `biasCoef` is the percentage of error corrected every step before clamping to a maximum speed. You can use this to make joints correct themselves smoothly instead of at a constant speed, but is probably the least useful of the three properties by far.
+
+==Constraints and Collision Shapes==
+
+Neither constraints or collision shapes have any knowledge of the other. When connecting joints to a body the anchor points don't need to be inside of any shapes attached to the body and it often makes sense that they shouldn't. Also, adding a constraint between two bodies doesn't prevent their collision shapes from colliding. In fact, this is the primary reason that the collision group property exists.
+
+=API:=
+
+==Video Tour of Current Joint Types==
+
+<wiki:video url="http://www.youtube.com/watch?v=ZgJJZTS0aMM"/>
+
+==`cpConstraint` struct==
+
+{{{
+typedef struct cpConstraint {
+	cpBody *a, *b;
+	cpFloat maxForce;
+	cpFloat biasCoef;
+	cpFloat maxBias;
+	
+	cpDataPointer data;
+} cpConstraint
+}}}
+
+  * `a` and `b` are the two bodies the constraint acts on.
+  * `maxForce` is the maximum force that the constraint can use to act on the two bodies. Defaults to INFINITY.
+  * `biasCoef` is the percentage of error corrected each step of the space. (Can cause issues if you don't use a constant time step) Defaults to 0.1.
+  * `maxBias` is the maximum speed at which the constraint can apply error correction. Defaults to INFINITY.
+  * `data` is a user definable data pointer. In the future, there will be more callbacks to use with joints, though at this time there isn't a strong use for it.
+
+To access properties of specific joint types, use the getter and setter functions provided (ex: `cpPinJointGetAnchr1()`). See the lists of properties for more information.
+
+==Shared Memory Management Functions:==
+
+{{{
+void cpConstraintDestroy(cpConstraint *constraint)
+void cpConstraintFree(cpConstraint *constraint)
+}}}
+
+ `Destroy` and `Free` functions are shared by all joint types. Allocation and initialization functions are specific to each joint type.
+ 
+=Joint Types:=
+
+==Pin Joints:==
+
+{{{
+cpPinJoint *cpPinJointAlloc(void)
+cpPinJoint *cpPinJointInit(cpPinJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+cpConstraint *cpPinJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+}}}
+
+ `a` and `b` are the two bodies to connect, and `anchr1` and `anchr2` are the anchor points on those bodies. The distance between the two anchor points is measured when the joint is created.
+
+*Properties:*
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || Dist ||
+
+==Slide Joints:==
+
+{{{
+cpSlideJoint *cpSlideJointAlloc(void)
+cpSlideJoint *cpSlideJointInit(cpSlideJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
+cpConstraint *cpSlideJointNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat min, cpFloat max)
+}}}
+
+ `a` and `b` are the two bodies to connect, `anchr1` and `anchr2` are the anchor points on those bodies, and `min` and `max` define the allowed distances of the anchor points.
+
+*Properties:*
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || Min ||
+|| cpFloat || Max ||
+
+==Pivot Joints:==
+
+{{{
+cpPivotJoint *cpPivotJointAlloc(void)
+cpPivotJoint *cpPivotJointInit(cpPivotJoint *joint, cpBody *a, cpBody *b, cpVect pivot)
+cpConstraint *cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot)
+cpConstraint *cpPivotJointNew2(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2)
+}}}
+
+ `a` and `b` are the two bodies to connect, and `pivot` is the point in world coordinates of the pivot. Because the pivot location is given in world coordinates, you must have the bodies moved into the correct positions already. Alternatively you can specify the joint based on a pair of anchor points, but make sure you have the bodies in the right place as the joint will fix itself as soon as you start simulating the space.
+
+*Properties:*
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+
+==Groove Joint:==
+
+{{{
+cpGrooveJoint *cpGrooveJointAlloc(void)
+cpGrooveJoint *cpGrooveJointInit(cpGrooveJoint *joint, cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
+cpConstraint *cpGrooveJointNew(cpBody *a, cpBody *b, cpVect groove_a, cpVect groove_b, cpVect anchr2)
+}}}
+
+ The groove goes from `groov_a` to `groove_b` on body `a`, and the pivot is attached to `anchr2` on body `b`. All coordinates are body local.
+
+*Properties:*
+|| Type || Name ||
+|| cpVect || Anchr2 ||
+
+==Damped Spring:==
+
+{{{
+cpDampedSpring *cpDampedSpringAlloc(void)
+cpDampedSpring *cpDampedSpringInit(cpDampedSpring *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat restLength, cpFloat stiffness, cpFloat damping)
+cpConstraint *cpDampedSpringNew(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat restLength, cpFloat stiffness, cpFloat damping)
+}}}
+
+ Defined much like a slide joint. `restLength` is the distance the spring wants to be, `stiffness` is the spring constant ([http://en.wikipedia.org/wiki/Young's_modulus Young's modulus]), and `damping` is how soft to make the damping of the spring.
+
+*Properties:*
+|| Type || Name ||
+|| cpVect || Anchr1 ||
+|| cpVect || Anchr2 ||
+|| cpFloat || RestLength ||
+|| cpFloat || Stiffness ||
+|| cpFloat || Damping ||
+
+==Damped Rotary Spring:==
+
+{{{
+cpDampedRotarySpring *cpDampedRotarySpringAlloc(void)
+cpDampedRotarySpring *cpDampedRotarySpringInit(cpDampedRotarySpring *joint, cpBody *a, cpBody *b, cpFloat restAngle, cpFloat stiffness, cpFloat damping)
+cpConstraint *cpDampedRotarySpringNew(cpBody *a, cpBody *b, cpFloat restAngle, cpFloat stiffness, cpFloat damping)
+}}}
+
+ Like a damped spring, but works in an angular fashion. `restAngle` is the relative angle in radians that the bodies want to have, `stiffness` and `damping` work basically the same as on a damped spring.
+
+*Properties:*
+|| Type || Name ||
+|| cpFloat || RestAngle ||
+|| cpFloat || Stiffness ||
+|| cpFloat || Damping ||
+
+==Rotary Limit Joint:==
+
+{{{
+cpRotaryLimitJoint *cpRotaryLimitJointAlloc(void)
+cpRotaryLimitJoint *cpRotaryLimitJointInit(cpRotaryLimitJoint *joint, cpBody *a, cpBody *b, cpFloat min, cpFloat max)
+cpConstraint *cpRotaryLimitJointNew(cpBody *a, cpBody *b, cpFloat min, cpFloat max)
+}}}
+
+ Constrains the relative rotations of two bodies. `min` and `max` are the angular limits in radians. It is implemented so that it's possible to for the range to be greater than a full revolution.
+
+*Properties:*
+|| Type || Name ||
+|| cpFloat || Min ||
+|| cpFloat || Max ||
+
+==Ratchet Joint:==
+
+{{{
+cpRatchetJoint *cpRatchetJointAlloc(void);
+cpRatchetJoint *cpRatchetJointInit(cpRatchetJoint *joint, cpBody *a, cpBody *b, cpFloat phase, cpFloat ratchet);
+cpConstraint *cpRatchetJointNew(cpBody *a, cpBody *b, cpFloat phase, cpFloat ratchet);
+}}}
+
+ Works like a socket wrench. `ratchet` is the distance between "clicks", `phase` is the initial offset to use when deciding where the ratchet angles are.
+
+*Properties:*
+|| Type || Name ||
+|| cpFloat || Angle ||
+|| cpFloat || Phase ||
+|| cpFloat || Ratchet ||
+
+==Gear Joint:==
+
+{{{
+cpGearJoint *cpGearJointAlloc(void);
+cpGearJoint *cpGearJointInit(cpGearJoint *joint, cpBody *a, cpBody *b, cpFloat phase, cpFloat ratio);
+cpConstraint *cpGearJointNew(cpBody *a, cpBody *b, cpFloat phase, cpFloat ratio);
+}}}
+
+ Keeps the angular velocity ratio of a pair of bodies constant. `ratio` is always measured in absolute terms. It is currently not possible to set the ratio in relation to a third body's angular velocity. `phase` is the initial angular offset of the two bodies.
+
+*Properties:*
+|| Type || Name ||
+|| cpFloat || Phase ||
+|| cpFloat || Ratio ||
+
+==Simple Motor:==
+
+{{{
+cpSimpleMotor *cpSimpleMotorAlloc(void);
+cpSimpleMotor *cpSimpleMotorInit(cpSimpleMotor *joint, cpBody *a, cpBody *b, cpFloat rate);
+cpConstraint *cpSimpleMotorNew(cpBody *a, cpBody *b, cpFloat rate);
+}}}
+
+ Keeps the relative angular velocity of a pair of bodies constant. `rate` is the desired relative angular velocity. You will usually want to set an force (torque) maximum for motors as otherwise they will be able to apply a nearly infinite torque to keep the bodies moving.
+
+*Properties:*
+|| Type || Name ||
+|| cpFloat || Rate ||
+
+=Notes:=
+
+ * You can add multiple joints between two bodies, but make sure that they don't fight. Doing so can cause the bodies move or spin violently.

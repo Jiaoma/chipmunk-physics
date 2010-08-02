@@ -1,0 +1,41 @@
+Chipmunk has been used in quite a few commercial and non-commercial games released on a number of platforms. This is only the list of games that I've been told of or heard of through Google. I'm sure that there are many many more out there.
+
+==PC/Mac/Linux==
+
+ * [http://howlingmoonsoftware.com/scribball.shtml Crayon Ball] - A physics twist on the old color matching genre. Made by a friend and myself. (Mac/PC)
+ * [http://www.batteryacid.org/biofilm/ Biofilm] - RTS based around bacteria. (Mac only)
+ * [http://ec.silverspherestudios.com/ Eternity's Child] - Platformer with comic book inspired graphics. With a WiiWare port of the game, it's possible Chipmunk has made it's way onto consoles! (PC only)
+ * [http://xmoto.tuxfamily.org/ XMoto] - While the core of the game uses ODE, the next version will use Chipmunk to simulate boxes and other items to interact with. (PC/Mac/Linux)
+ * [http://nuclearnova.com/liquiddefense.php Liquid Defense] - Somewhat similar to Enigmo or Incredible Machine. (Mac only)
+ * [http://www.zanydoodle.com/ Zany Doodle] - A physics sandbox game similar to Crayon Physics. [http://www.youtube.com/results?search_query=zany+doodle&search_type=&aq=f YouTube videos]
+ * [http://www.gnadegames.com/toygame.php The Magic Toy Chest] - Physics based puzzle game. Looks a lot like The Incredible Machine. (PC only)
+
+==PSP/DS Homebrew==
+ * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker] - Make towers and then knock them over for points. (PSP)
+ * [http://beyondds.free.fr/index.php?2008/07/07/70-antitetris-10 Anti-Tetris] A comical (IMO) twist on Tetris. I'd love to see the surprise on a hardened Tetris veteran's face when handed that game. :D (PSP)
+ * [http://www.boive.fr/Jeux/Homebrews-DS/Brix-DS.html Brix DS] - Controlled tower toppling game.
+
+==iPhone==
+
+ * [http://howlingmoonsoftware.com/iPhoneScribBall.shtml Crayon Ball] - Real-time physics based puzzle game. (Made by yours truly)
+ * [http://howlingmoonsoftware.com/twilightGolf.php Twilight Golf] - Another physics puzzler made by me featuring realtime dynamic shadows running on the iPhone!
+ * [http://fingerphysics.com/ Finger Physics] - A great looking physics puzzler.
+ * [http://www.inmotionsoftware.com/AppsGames/IDigIt.html I Dig It] - #1 app for a while. An exploration game with some Dig Dug vibes to it.
+ * [http://itunes.apple.com/us/app/crush-the-castle/id318639200?mt=8 Crush the Castle] - Destroy castles with a catapult. Was up into the top 10 on the App Store for a while.
+ * [http://itunes.apple.com/us/app/chalkboard-stunts/id353337824?mt=8 Chalkboard Stunts] - Fun looking racing game with a built in level editor.
+ * [http://www.inmotionsoftware.com/AppsGames/DungeonDefense.html DungeonDefense] - A tower defense like game from the makers of I Dig It.
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=285947378&mt=8 Hangman Sim] - Simple Hangman game with an interactive hangman doll.
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=290661843&mt=8 Athletics] - Simple racing game.
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=289771175&mt=8 iSplume] - Snood clone with physics.
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=288297101&mt=8 Micro Labyrinth] - Simple Labyrinth game.
+ * [http://weelittlegamer.com/ WeeLittleGamer.com] Has a number of simple games designed for younger audiences. Chipmunk is used in several of them.
+ * [http://www.chaoticbox.com/pinch_n_pop.php Pinch 'n Pop] - Looks very well polished, but is hard to describe the gameplay in words. You must check out the gameplay video!
+ * [http://www.chaoticbox.com/pollywog.php Pollywog] - Another great looking game by Chaotic Box.
+ * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=294850556&mt=8 Pachinko Puzzle] - Similar to the old mechanical handheld games that dropped balls from the top. You must hit all pegs with a certain number of marbles in a certain amount of time.
+ * [http://itunes.apple.com/us/app/twiddle/id317852089?mt=8 Twiddle] - Pong based word game.
+ * [http://www.4iphone4.me/BallDizzy/ Ball Dizzy] - Pool-like arcade game.
+ * [http://www.4iphone4.me/AirportMadness/ Airport Madness] - Arcade balancing game.
+ * [http://seraphimsscepter.com/ Seraphim's Scepter] - Polished looking breakout clone.
+ * Chipmunk is included with the [http://code.google.com/p/cocos2d-iphone/ Cocos 2D] game engine, so I'm sure there are a lot of iPhone games out there using it!
+
+If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list. I know that there are a lot missing.

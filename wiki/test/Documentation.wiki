@@ -1,0 +1,104 @@
+http://files.slembcke.net/chipmunk/logo/logo1_med.png
+
+=Chipmunk Physics=
+
+*Note:* The documentation on this wiki documents Chipmunk v5.0.0. 
+
+First of all, Chipmunk is a 2D rigid body physics library distributed under the MIT license. Though not yet complete, it is intended to be fast, numerically stable, and easy to use. I've put hundreds of hours of work into making Chipmunk what it is today. If you find Chipmunk has saved you a lot of time, please consider [http://code.google.com/p/chipmunk-physics/#Donate: donating]. You'll make an indie game developer very happy.
+
+I would like to give a Erin Catto a big thank you, as the most of the ideas for the constraint solver I use now come from his Box2D example code. (Now a full fledged physics engine all it's own: [http://www.box2d.org/ Box2D]). His contact persistence idea allows for stable stacks of objects with very few iterations of the contact solution. Previously my solver produced mushy piles of objects or required a large number of iterations in order to get a stable behavior.
+
+
+=Overview=
+
+There are 4 basic things you need to know about in order to work with Chipmunk.
+
+ * *Rigid Bodies:* A rigid body holds the physical properties of an object. (mass, position, rotation, velocity, etc.) It does not have a shape by itself. If you’ve done physics with particles before, rigid bodies differ in that they are able to rotate.
+ * *Collision Shapes:* By attaching shapes to bodies, you can define the a body’s shape. You can attach as many shapes to a single body as you need to in order to define a complex shape. Shapes contain the surface properties of an object such as how much friction or elasticity it has.
+ * *Constraints/Joints:* Constraints and joints describe how bodies are attached to each other.
+ * *Spaces:* Spaces are the basic simulation unit in Chipmunk. You add bodies, shapes and joints to a space, and then update the space as a whole.
+
+=Support=
+
+The best way to get support is to visit the [http://www.slembcke.net/forums/viewforum.php?f=1 Chipmunk Forums]. There are plenty of people around using Chipmunk on the just about every platform I've ever heard of. If you are working on a commercial project, Howling Moon Software is also available for [http://howlingmoonsoftware.com/contracting.php contracting].
+
+==Rigid bodies, collision shapes and sprites:==
+
+There is often confusion between rigid bodies and their collision shapes in Chipmunk and how they relate to sprites. A sprite would be a visual representation of an object, the sprite is drawn at the position and rotation of the rigid body. Collision shapes representation of the object, and how it should collide with other objects. A sprite and collision shape have little to do with one another other than you probably want the collision shape to match the sprite’s shape.
+
+
+=Chipmunk Basics=
+
+==Initialization==
+
+Before you do anything else, you *must* initialize Chipmunk. Otherwise you _will_ crash as soon as the first collision happens.
+
+{{{
+cpInitChipmunk(); // That is all
+}}}
+
+Additionally, if you didn't compile Chipmunk with the NDEBUG flag, it will print out the debug mode message and the current version number to stdout.
+
+==Memory Management the Chipmunk way==
+
+For many of the structures you will use, Chipmunk uses a more or less standard set of memory management functions. For example:
+
+ * `cpSpaceAlloc()` allocates but does not initialize a [cpSpace] struct.
+ * `cpSpaceInit(cpSpace *space)` initializes a [cpSpace] struct.
+ * `cpSpaceDestroy(cpSpace *space)` frees all memory allocated by the `cpSpaceInit()`, but does not free the [cpSpace] struct itself.
+ * `cpSpaceNew()` allocates and initializes a [cpSpace] struct (calls `cpSpaceAlloc ()` and `cpSpaceInit()`).
+ * `cpSpaceFree(cpSpace *space)` calls `cpSpaceDestroy()` and then frees the [cpSpace] struct.
+
+While you will probably use the new/free versions exclusively if you are using C/C++, but the alloc/init/destroy functions can be helpful when writing language extensions so that you can more easily work with a garbage collector.
+
+In general, you are responsible for freeing any structs that you allocate. Chipmunk does not have any fancy reference counting or garbage collection.
+
+
+==Math the Chipmunk way==
+
+First of all, Chipmunk uses double precision floating point numbers throughout it's calculations by default. This is likely to be faster on most modern desktop processors, and means you have to worry less about floating point round off errors. You can change the floating point type used by Chipmunk when compiling the library. Look in chipmunk.h.
+
+Chipmunk defines a number of aliases for common math functions so that you can choose to use floats or doubles for Chipmunk's floating point type. In your own code, there probably isn't a strong reason to use these aliases unless you expect you might want to change Chipmunk's floating point type later and a 2% performance hit from using the wrong float/double version of math functions will matter.
+
+That said, there are a few functions you will probably find very useful:
+
+{{{
+cpFloat cpfclamp(cpFloat f, cpFloat min, cpFloat max)
+}}}
+
+Clamp `f` to be between `min` and `max`.
+
+{{{
+cpFloat cpflerp(cpFloat f1, cpFloat f2, cpFloat t)
+}}}
+
+Linearly interpolate between `f1` and `f2`.
+
+{{{
+cpFloat cpflerpconst(cpFloat f1, cpFloat f2, cpFloat d)
+}}}
+
+Linearly interpolate from `f1` towards `f2` by `d`.
+
+To represent vectors, Chipmunk defines the [cpVect] type and a set of inline functions for working with them (cpv, cpvadd, cpvmult, etc). See the API reference for more information..
+
+
+=Chipmunk C API=
+
+==Main API==
+
+ * [cpVect] - Create and manipulate 2D vectors.
+ * [cpBB] - Create and manipulate 2D axis-aligned bounding boxes.
+ * [cpBody] - Create and work with rigid bodies.
+ * [cpShape] - Attach collision shapes to rigid bodies.
+ * [cpSpace] -  Create a "space" to put your objects into and simulate them.
+ * [cpConstraint] - Create joints and other constraints.
+ * Learn about how CollisionDetection in Chipmunk works.
+ * Learn about Chipmunk's CallbackSystem and [cpArbiter] struct for recieving collision events and adding custom behavior to your physics.
+ * Learn about [Queries]: point, segment (raycasting), and bounding box queries
+
+=Links=
+
+ * [http://www.slembcke.net/forums/viewforum.php?f=1] - The official forum
+ * [Games] - A list of games done with Chipmunk
+ * [BindingsAndPorts] - A list of bindings and ports of Chipmunk to other languages.
