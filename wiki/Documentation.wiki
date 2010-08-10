@@ -1,4 +1,16 @@
-http://files.slembcke.net/chipmunk/logo/logo1_med.png
+=THE DOCUMENTATION HAS MOVED!=
+
+You can find the latest documentation online [http://files.slembcke.net/chipmunk/release/ChipmunkLatest-Docs/ here].
+
+The Chipmunk documentation has moved! Using the Google Code wiki for the documentation turned out to be a bad idea as it cannot easily be versioned. Instead I've moved to using including the documentation and documentation source along with the Chipmunk source.
+
+I'll keep the old docs up on the wiki for a while however.
+
+.
+
+.
+
+.
 
 =Chipmunk Physics=
 
