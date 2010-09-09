@@ -12,7 +12,8 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
  * Blitzmax - [http://code.google.com/p/maxmods/wiki/ChipmunkModule ChipmunkModule]
  * C++ - [http://github.com/Irwin1138/ChipmunkWrapper/tree/master C++ wrapper]
  * Multimedia Fusion - [http://www.phizix.tk/ Phizix] (look under the extentions link)
- * I have a binding for OOC if people are interested, though both the language and binding are a bit experimental.
+* FreeBASIC - http://code.google.com/p/chipmunk-freebasic/
+ * I have a binding for OOC if people are interested, though both the language and binding are a bit experimental at this point.
 
 I know people have also used it from Lua as well, although Google seems to be of little help.
 
