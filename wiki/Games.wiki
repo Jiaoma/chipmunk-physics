@@ -23,6 +23,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.inmotionsoftware.com/AppsGames/IDigIt.html I Dig It] - #1 app for a while. An exploration game with some Dig Dug vibes to it.
  * [http://itunes.apple.com/us/app/crush-the-castle/id318639200?mt=8 Crush the Castle] - Destroy castles with a catapult. Was up into the top 10 on the App Store for a while.
  * [http://itunes.apple.com/us/app/chalkboard-stunts/id353337824?mt=8 Chalkboard Stunts] - Fun looking racing game with a built in level editor.
+* [http://bigstickgames.atspace.com/doodlehome.htm Doodle Army] - Action packed shooter game.
  * [http://www.inmotionsoftware.com/AppsGames/DungeonDefense.html DungeonDefense] - A tower defense like game from the makers of I Dig It.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=285947378&mt=8 Hangman Sim] - Simple Hangman game with an interactive hangman doll.
  * [http://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=290661843&mt=8 Athletics] - Simple racing game.
