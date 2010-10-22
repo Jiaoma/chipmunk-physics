@@ -13,7 +13,7 @@ I don't maintain any of these projects other than the Ruby bindings, so I take n
  * C++ - [http://github.com/Irwin1138/ChipmunkWrapper/tree/master C++ wrapper]
  * Multimedia Fusion - [http://www.phizix.tk/ Phizix] (look under the extentions link)
  * FreeBASIC - http://code.google.com/p/chipmunk-freebasic/
-* PureBasic - http://www.slembcke.net/forums/viewtopic.php?f=6&t=1235
+ * PureBasic - http://www.slembcke.net/forums/viewtopic.php?f=6&t=1235
 
 I know people have also used it from Lua as well, although Google seems to be of little help.
 
