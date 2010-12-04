@@ -23,7 +23,8 @@ If you've written a binding that's not on this list, send me an email.
 
 While Chipmunk itself borrowed the solver from [http://www.box2d.org/ Box2D] back when it was but a wee demo and replaced the collision detection added other features, so have other people done the same with Chipmunk. All of them have significant added features of their own.
 
+ * [http://www.dsource.org/projects/chipmunkd Chipmunkd] - Chipmunk ported to D.
  * [http://code.google.com/p/glaze/ Glaze] - Chipmunk ported to the Flash AVM2.
- * [http://www.dsource.org/projects/blaze Blaze] - D based.
+ * [http://www.dsource.org/projects/blaze Blaze] - D based (Also shares code with Glaze).
  * [http://github.com/sykopomp/squirl Squirl] - Chipmunk in LISP.
  * [http://code.google.com/p/physaxe/ Physaxe] - Chipmunk ported to haXe.
