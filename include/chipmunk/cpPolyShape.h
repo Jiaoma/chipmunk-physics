@@ -29,16 +29,16 @@ typedef struct cpPolyShapeAxis{
 
 // Convex polygon shape structure.
 typedef struct cpPolyShape{
-	CP_PRIVATE(cpShape shape);
+	cpShape shape;
 	
 	// Vertex and axis lists.
-	CP_PRIVATE(int numVerts);
-	CP_PRIVATE(cpVect *verts);
-	CP_PRIVATE(cpPolyShapeAxis *axes);
+	int numVerts;
+	cpVect *verts;
+	cpPolyShapeAxis *axes;
 
 	// Transformed vertex and axis lists.
-	CP_PRIVATE(cpVect *tVerts);
-	CP_PRIVATE(cpPolyShapeAxis *tAxes);
+	cpVect *tVerts;
+	cpPolyShapeAxis *tAxes;
 } cpPolyShape;
 
 // Basic allocation functions.
@@ -50,7 +50,7 @@ cpPolyShape *cpBoxShapeInit(cpPolyShape *poly, cpBody *body, cpFloat width, cpFl
 cpShape *cpBoxShapeNew(cpBody *body, cpFloat width, cpFloat height);
 
 // Check that a set of vertexes has a correct winding and that they are convex
-cpBool cpPolyValidate(const cpVect *verts, const int numVerts);
+cpBool cpPolyValidate(cpVect *verts, int numVerts);
 
 int cpPolyShapeGetNumVerts(cpShape *shape);
 cpVect cpPolyShapeGetVert(cpShape *shape, int idx);
@@ -61,11 +61,11 @@ cpVect cpPolyShapeGetVert(cpShape *shape, int idx);
 static inline cpFloat
 cpPolyShapeValueOnAxis(const cpPolyShape *poly, const cpVect n, const cpFloat d)
 {
-	cpVect *verts = poly->CP_PRIVATE(tVerts);
+	cpVect *verts = poly->tVerts;
 	cpFloat min = cpvdot(n, verts[0]);
 	
 	int i;
-	for(i=1; i<poly->CP_PRIVATE(numVerts); i++)
+	for(i=1; i<poly->numVerts; i++)
 		min = cpfmin(min, cpvdot(n, verts[i]));
 	
 	return min - d;
@@ -75,10 +75,10 @@ cpPolyShapeValueOnAxis(const cpPolyShape *poly, const cpVect n, const cpFloat d)
 static inline cpBool
 cpPolyShapeContainsVert(const cpPolyShape *poly, const cpVect v)
 {
-	cpPolyShapeAxis *axes = poly->CP_PRIVATE(tAxes);
+	cpPolyShapeAxis *axes = poly->tAxes;
 	
 	int i;
-	for(i=0; i<poly->CP_PRIVATE(numVerts); i++){
+	for(i=0; i<poly->numVerts; i++){
 		cpFloat dist = cpvdot(axes[i].n, v) - axes[i].d;
 		if(dist > 0.0f) return cpFalse;
 	}
@@ -90,10 +90,10 @@ cpPolyShapeContainsVert(const cpPolyShape *poly, const cpVect v)
 static inline cpBool
 cpPolyShapeContainsVertPartial(const cpPolyShape *poly, const cpVect v, const cpVect n)
 {
-	cpPolyShapeAxis *axes = poly->CP_PRIVATE(tAxes);
+	cpPolyShapeAxis *axes = poly->tAxes;
 	
 	int i;
-	for(i=0; i<poly->CP_PRIVATE(numVerts); i++){
+	for(i=0; i<poly->numVerts; i++){
 		if(cpvdot(axes[i].n, n) < 0.0f) continue;
 		cpFloat dist = cpvdot(axes[i].n, v) - axes[i].d;
 		if(dist > 0.0f) return cpFalse;

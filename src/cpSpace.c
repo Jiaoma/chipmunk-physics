@@ -20,11 +20,11 @@
  */
  
 #include <stdlib.h>
-//#include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 cpTimestamp cp_contact_persistence = 3;
 
@@ -37,7 +37,7 @@ contactSetEql(cpShape **shapes, cpArbiter *arb)
 	cpShape *a = shapes[0];
 	cpShape *b = shapes[1];
 	
-	return ((a == arb->a && b == arb->b) || (b == arb->a && a == arb->b));
+	return ((a == arb->private_a && b == arb->private_b) || (b == arb->private_a && a == arb->private_b));
 }
 
 // Transformation function for contactSet.
@@ -144,7 +144,8 @@ cpSpaceInit(cpSpace *space)
 	
 	space->postStepCallbacks = NULL;
 	
-	cpBodyInitStatic(&space->staticBody);
+	cpBodyInit(&space->staticBody, INFINITY, INFINITY);
+	space->staticBody.space = space;
 	
 	return space;
 }
@@ -313,6 +314,20 @@ cpSpaceAddShape(cpSpace *space, cpShape *shape)
 	return shape;
 }
 
+static void
+activateShapesTouchingShapeHelper(cpShape *shape, void *unused)
+{
+	cpBodyActivate(shape->body);
+}
+
+static void
+activateShapesTouchingShape(cpSpace *space, cpShape *shape)
+{
+	// TODO this query should be more precise
+	// Use shape queries once they are written
+	cpSpaceBBQuery(space, shape->bb, shape->layers, shape->group, activateShapesTouchingShapeHelper, NULL);
+}
+
 cpShape *
 cpSpaceAddStaticShape(cpSpace *space, cpShape *shape)
 {
@@ -323,7 +338,7 @@ cpSpaceAddStaticShape(cpSpace *space, cpShape *shape)
 	if(!shape->body) shape->body = &space->staticBody;
 	
 	cpShapeCacheBB(shape);
-	cpSpaceActivateShapesTouchingShape(space, shape);
+	activateShapesTouchingShape(space, shape);
 	cpSpaceHashInsert(space->staticShapes, shape, shape->hashid, shape->bb);
 	
 	return shape;
@@ -332,7 +347,7 @@ cpSpaceAddStaticShape(cpSpace *space, cpShape *shape)
 cpBody *
 cpSpaceAddBody(cpSpace *space, cpBody *body)
 {
-	cpAssertWarn(!cpBodyIsStatic(body), "Static bodies cannot be added to a space as they are not meant to be simulated.");
+	cpAssertWarn(body->m != INFINITY, "Did you really mean to add an infinite mass body to the space?");
 	cpAssert(!body->space, "Cannot add a body to a more than one space or to the same space twice.");
 //	cpAssertSpaceUnlocked(space); This should be safe as long as it's not from an integration callback
 	
@@ -367,11 +382,8 @@ typedef struct removalContext {
 static cpBool
 contactSetFilterRemovedShape(cpArbiter *arb, removalContext *context)
 {
-	if(context->shape == arb->a || context->shape == arb->b){
-		if(arb->state != cpArbiterStateCached){
-			arb->handler->separate(arb, context->space, arb->handler->data);
-		}
-		
+	if(context->shape == arb->private_a || context->shape == arb->private_b){
+		arb->handler->separate(arb, context->space, arb->handler->data);
 		cpArrayPush(context->space->pooledArbiters, arb);
 		return cpFalse;
 	}
@@ -392,7 +404,7 @@ cpSpaceRemoveShape(cpSpace *space, cpShape *shape)
 	
 	cpAssertSpaceUnlocked(space);
 	cpAssertWarn(cpHashSetFind(space->activeShapes->handleSet, shape->hashid, shape),
-		"Cannot remove a shape that was not added to the space. (Removed twice maybe?)");
+		"Cannot remove a shape that was never added to the space. (Removed twice maybe?)");
 	
 	cpBodyRemoveShape(body, shape);
 	
@@ -405,21 +417,21 @@ void
 cpSpaceRemoveStaticShape(cpSpace *space, cpShape *shape)
 {
 	cpAssertWarn(cpHashSetFind(space->staticShapes->handleSet, shape->hashid, shape),
-		"Cannot remove a static or sleeping shape that was not added to the space. (Removed twice maybe?)");
+		"Cannot remove a static or sleeping shape that was never added to the space. (Removed twice maybe?)");
 	cpAssertSpaceUnlocked(space);
 	
 	removalContext context = {space, shape};
 	cpHashSetFilter(space->contactSet, (cpHashSetFilterFunc)contactSetFilterRemovedShape, &context);
 	cpSpaceHashRemove(space->staticShapes, shape, shape->hashid);
 	
-	cpSpaceActivateShapesTouchingShape(space, shape);
+	activateShapesTouchingShape(space, shape);
 }
 
 void
 cpSpaceRemoveBody(cpSpace *space, cpBody *body)
 {
 	cpAssertWarn(body->space == space,
-		"Cannot remove a body that was not added to the space. (Removed twice maybe?)");
+		"Cannot remove a body that was never added to the space. (Removed twice maybe?)");
 	cpAssertSpaceUnlocked(space);
 	
 	cpBodyActivate(body);
@@ -431,7 +443,7 @@ void
 cpSpaceRemoveConstraint(cpSpace *space, cpConstraint *constraint)
 {
 	cpAssertWarn(cpArrayContains(space->constraints, constraint),
-		"Cannot remove a constraint that was not added to the space. (Removed twice maybe?)");
+		"Cannot remove a constraint that was never added to the space. (Removed twice maybe?)");
 //	cpAssertSpaceUnlocked(space); Should be safe as long as its not from a constraint callback.
 	
 	cpBodyActivate(constraint->a);

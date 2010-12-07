@@ -22,9 +22,8 @@
 // NOTE: cpArray is rarely used and will probably go away.
 
 typedef struct cpArray{
-	CP_PRIVATE(int num);
-	CP_PRIVATE(int max);
-	CP_PRIVATE(void **arr);
+	int num, max;
+	void **arr;
 } cpArray;
 
 typedef void (*cpArrayIter)(void *ptr, void *data);

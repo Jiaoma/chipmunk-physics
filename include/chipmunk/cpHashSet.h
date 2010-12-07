@@ -25,11 +25,11 @@
 // cpHashSetBin's form the linked lists in the chained hash table.
 typedef struct cpHashSetBin {
 	// Pointer to the element.
-	CP_PRIVATE(void *elt);
+	void *elt;
 	// Hash value of the element.
-	CP_PRIVATE(cpHashValue hash);
+	cpHashValue hash;
 	// Next element in the chain.
-	CP_PRIVATE(struct cpHashSetBin *next);
+	struct cpHashSetBin *next;
 } cpHashSetBin;
 
 // Equality function. Returns true if ptr is equal to elt.
@@ -39,22 +39,21 @@ typedef void *(*cpHashSetTransFunc)(void *ptr, void *data);
 
 typedef struct cpHashSet {
 	// Number of elements stored in the table.
-	CP_PRIVATE(int entries);
+	int entries;
 	// Number of cells in the table.
-	CP_PRIVATE(int size);
+	int size;
 	
-	CP_PRIVATE(cpHashSetEqlFunc eql);
-	CP_PRIVATE(cpHashSetTransFunc trans);
+	cpHashSetEqlFunc eql;
+	cpHashSetTransFunc trans;
 	
 	// Default value returned by cpHashSetFind() when no element is found.
 	// Defaults to NULL.
-	CP_PRIVATE(void *default_value);
+	void *default_value;
 	
 	// The table and recycled bins
-	CP_PRIVATE(cpHashSetBin **table);
-	CP_PRIVATE(cpHashSetBin *pooledBins);
+	cpHashSetBin **table, *pooledBins;
 	
-	CP_PRIVATE(cpArray *allocatedBuffers);
+	cpArray *allocatedBuffers;
 } cpHashSet;
 
 // Basic allocation/destruction functions.

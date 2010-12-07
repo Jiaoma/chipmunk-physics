@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 
 //#define CP_ARRAY_INCREMENT 10

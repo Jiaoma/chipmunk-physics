@@ -21,7 +21,7 @@
  
 #include <stdlib.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 #pragma mark Point Query Functions
 
@@ -164,7 +164,7 @@ cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLayers laye
 	return out->shape;
 }
 
-#pragma mark BB Query Functions
+#pragma mark BB Query functions
 
 typedef struct bbQueryContext {
 	cpLayers layers;
@@ -193,64 +193,4 @@ cpSpaceBBQuery(cpSpace *space, cpBB bb, cpLayers layers, cpGroup group, cpSpaceB
 		cpSpaceHashQuery(space->activeShapes, &bb, bb, (cpSpaceHashQueryFunc)bbQueryHelper, &context);
 		cpSpaceHashQuery(space->staticShapes, &bb, bb, (cpSpaceHashQueryFunc)bbQueryHelper, &context);
 	} space->locked = locked;
-}
-
-#pragma mark Shape Query Functions
-
-typedef struct shapeQueryContext {
-	cpSpaceShapeQueryFunc func;
-	void *data;
-	cpBool anyCollision;
-} shapeQueryContext;
-
-// Callback from the spatial hash.
-static void
-shapeQueryHelper(cpShape *a, cpShape *b, shapeQueryContext *context)
-{
-	// Reject any of the simple cases
-	if(
-		(a->group && a->group == b->group) ||
-		!(a->layers & b->layers) ||
-		a->sensor || b->sensor
-	) return;
-	
-	cpContact contacts[CP_MAX_CONTACTS_PER_ARBITER];
-	int numContacts = 0;
-	
-	// Shape 'a' should have the lower shape type. (required by cpCollideShapes() )
-	if(a->klass->type <= b->klass->type){
-		numContacts = cpCollideShapes(a, b, contacts);
-	} else {
-		numContacts = cpCollideShapes(b, a, contacts);
-		for(int i=0; i<numContacts; i++) contacts[i].n = cpvneg(contacts[i].n);
-	}
-	
-	if(numContacts){
-		context->anyCollision = cpTrue;
-		
-		if(context->func){
-			cpContactPointSet set = {numContacts, {}};
-			for(int i=0; i<set.count; i++){
-				set.points[i].point = contacts[i].p;
-				set.points[i].normal = contacts[i].p;
-				set.points[i].dist = contacts[i].dist;
-			}
-			
-			context->func(b, &set, context->data);
-		}
-	}
-}
-
-cpBool
-cpSpaceShapeQuery(cpSpace *space, cpShape *shape, cpSpaceShapeQueryFunc func, void *data)
-{
-	cpBB bb = cpShapeCacheBB(shape);
-	shapeQueryContext context = {func, data, cpFalse};
-	
-	cpBool locked = space->locked; space->locked = cpTrue; {
-		cpSpaceHashQuery(space->activeShapes, shape, bb, (cpSpaceHashQueryFunc)shapeQueryHelper, &context);
-		cpSpaceHashQuery(space->staticShapes, shape, bb, (cpSpaceHashQueryFunc)shapeQueryHelper, &context);
-	} space->locked = locked;
-	
-	return context.anyCollision;
 }

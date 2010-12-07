@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 #include "prime.h"
 
 static void freeWrap(void *ptr, void *unused){cpfree(ptr);}

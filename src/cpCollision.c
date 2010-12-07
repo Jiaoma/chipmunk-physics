@@ -21,9 +21,9 @@
  
 #include <stdlib.h>
 #include <math.h>
-//#include <stdio.h>
+#include <stdio.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 typedef int (*collisionFunc)(const cpShape *, const cpShape *, cpContact *);
 
@@ -116,14 +116,12 @@ circle2segment(const cpShape *circleShape, const cpShape *segmentShape, cpContac
 static cpContact *
 nextContactPoint(cpContact *arr, int *numPtr)
 {
-	int index = *numPtr;
+	int num = *numPtr;
 	
-	if(index < CP_MAX_CONTACTS_PER_ARBITER){
-		(*numPtr) = index + 1;
-		return &arr[index];
-	} else {
-		return &arr[CP_MAX_CONTACTS_PER_ARBITER - 1];
-	}
+	if(num < CP_MAX_CONTACTS_PER_ARBITER)
+		(*numPtr) = num + 1;
+	
+	return &arr[num];
 }
 
 // Find the minimum separating axis for the give poly and axis list.

@@ -42,6 +42,7 @@ typedef struct cpCollisionHandler {
 	void *data;
 } cpCollisionHandler;
 
+#define CP_MAX_CONTACTS_PER_ARBITER 6
 typedef struct cpContactBufferHeader {
 	cpTimestamp stamp;
 	struct cpContactBufferHeader *next;
@@ -74,46 +75,44 @@ typedef struct cpSpace{
 	// *** Internally Used Fields
 	
 	// When the space is locked, you should not add or remove objects;
-	CP_PRIVATE(cpBool locked);
+	cpBool locked;
 	
 	// Time stamp. Is incremented on every call to cpSpaceStep().
-	CP_PRIVATE(cpTimestamp stamp);
+	cpTimestamp stamp;
 
 	// The static and active shape spatial hashes.
-	CP_PRIVATE(cpSpaceHash *staticShapes);
-	CP_PRIVATE(cpSpaceHash *activeShapes);
+	cpSpaceHash *staticShapes;
+	cpSpaceHash *activeShapes;
 	
 	// List of bodies in the system.
-	CP_PRIVATE(cpArray *bodies);
+	cpArray *bodies;
 	
 	// List of groups of sleeping bodies.
-	CP_PRIVATE(cpArray *sleepingComponents);
+	cpArray *sleepingComponents;
 	
 	// List of active arbiters for the impulse solver.
-	CP_PRIVATE(cpArray *arbiters);
-	CP_PRIVATE(cpArray *pooledArbiters);
+	cpArray *arbiters, *pooledArbiters;
 	
 	// Linked list ring of contact buffers.
 	// Head is the newest buffer, and each buffer points to a newer buffer.
 	// Head wraps around and points to the oldest (tail) buffer.
-	CP_PRIVATE(cpContactBufferHeader *contactBuffersHead);
-	CP_PRIVATE(cpContactBufferHeader *_contactBuffersTail_Deprecated);
+	cpContactBufferHeader *contactBuffersHead, *_contactBuffersTail;
 	
 	// List of buffers to be free()ed when destroying the space.
-	CP_PRIVATE(cpArray *allocatedBuffers);
+	cpArray *allocatedBuffers;
 	
 	// Persistant contact set.
-	CP_PRIVATE(cpHashSet *contactSet);
+	cpHashSet *contactSet;
 	
 	// List of constraints in the system.
-	CP_PRIVATE(cpArray *constraints);
+	cpArray *constraints;
 	
 	// Set of collisionpair functions.
-	CP_PRIVATE(cpHashSet *collFuncSet);
+	cpHashSet *collFuncSet;
 	// Default collision handler.
-	CP_PRIVATE(cpCollisionHandler defaultHandler);
+	cpCollisionHandler defaultHandler;
 	
-	CP_PRIVATE(cpHashSet *postStepCallbacks);
+	cpHashSet *postStepCallbacks;
 	
 	cpBody staticBody;
 } cpSpace;
@@ -179,13 +178,6 @@ cpShape *cpSpaceSegmentQueryFirst(cpSpace *space, cpVect start, cpVect end, cpLa
 // BB query callback function
 typedef void (*cpSpaceBBQueryFunc)(cpShape *shape, void *data);
 void cpSpaceBBQuery(cpSpace *space, cpBB bb, cpLayers layers, cpGroup group, cpSpaceBBQueryFunc func, void *data);
-
-// Shape query callback function
-typedef void (*cpSpaceShapeQueryFunc)(cpShape *shape, cpContactPointSet *points, void *data);
-cpBool cpSpaceShapeQuery(cpSpace *space, cpShape *shape, cpSpaceShapeQueryFunc func, void *data);
-
-
-void cpSpaceActivateShapesTouchingShape(cpSpace *space, cpShape *shape);
 
 
 // Iterator function for iterating the bodies in a space.

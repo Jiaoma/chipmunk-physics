@@ -84,27 +84,24 @@ typedef struct cpBody{
 	// *** Internally Used Fields
 	
 	// Velocity bias values used when solving penetrations and correcting constraints.
-	CP_PRIVATE(cpVect v_bias);
-	CP_PRIVATE(cpFloat w_bias);
+	cpVect v_bias;
+	cpFloat w_bias;
 	
 	// Space this body has been added to
-	CP_PRIVATE(struct cpSpace *space);
+	struct cpSpace *space;
 	
 	// Pointer to the shape list.
 	// Shapes form a linked list using cpShape.next when added to a space.
-	CP_PRIVATE(struct cpShape *shapesList);
+	struct cpShape *shapesList;
 	
 	// Used by cpSpaceStep() to store contact graph information.
-	CP_PRIVATE(cpComponentNode node);
+	cpComponentNode node;
 } cpBody;
 
 // Basic allocation/destruction functions
 cpBody *cpBodyAlloc(void);
 cpBody *cpBodyInit(cpBody *body, cpFloat m, cpFloat i);
 cpBody *cpBodyNew(cpFloat m, cpFloat i);
-
-cpBody *cpBodyInitStatic(cpBody *body);
-cpBody *cpBodyNewStatic();
 
 void cpBodyDestroy(cpBody *body);
 void cpBodyFree(cpBody *body);
@@ -113,26 +110,21 @@ void cpBodyFree(cpBody *body);
 void cpBodyActivate(cpBody *body);
 
 // Force a body to sleep;
-// defined in cpSpaceComponent.c
 void cpBodySleep(cpBody *body);
-void cpBodySleepWithGroup(cpBody *body, cpBody *group);
+//void cpBodySleepGroup(cpBody *body, ...);
 
 static inline cpBool
 cpBodyIsSleeping(const cpBody *body)
 {
-	return (CP_PRIVATE(body->node).next != ((cpBody*)0));
+	return (body->node.next != ((cpBody*)0));
 }
 
-static inline cpBool
-cpBodyIsStatic(const cpBody *body)
-{
-	return CP_PRIVATE(body->node).idleTime == INFINITY;
-}
+cpBool cpBodyIsStatic(const cpBody *body);
 
 static inline cpBool
 cpBodyIsRogue(const cpBody *body)
 {
-	return (body->CP_PRIVATE(space) == ((struct cpSpace*)0));
+	return (body->space == ((struct cpSpace*)0));
 }
 
 

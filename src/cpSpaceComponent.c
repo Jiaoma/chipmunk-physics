@@ -21,7 +21,7 @@
  
 #include <stdlib.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 #pragma mark Sleeping Functions
 
@@ -68,10 +68,9 @@ componentActivate(cpBody *root)
 	do {
 		next = body->node.next;
 		
-		cpFloat idleTime = (cpBodyIsStatic(body) ? (cpFloat)INFINITY : 0.0f);
-		cpComponentNode node = {NULL, NULL, 0, idleTime};
+		cpComponentNode node = {NULL, NULL, 0, 0.0f};
 		body->node = node;
-		if(!cpBodyIsRogue(body)) cpArrayPush(space->bodies, body);
+		cpArrayPush(space->bodies, body);
 		
 		for(cpShape *shape=body->shapesList; shape; shape=shape->next){
 			cpSpaceHashRemove(space->staticShapes, shape, shape->hashid);
@@ -87,7 +86,7 @@ cpBodyActivate(cpBody *body)
 {
 	// Reset the idle time even if it's not in a currently sleeping component
 	// Like a body resting on or jointed to a rogue body.
-	if(!cpBodyIsStatic(body)) body->node.idleTime = 0.0f;
+	body->node.idleTime = 0.0f;
 	componentActivate(componentNodeRoot(body));
 }
 
@@ -111,8 +110,8 @@ mergeBodies(cpSpace *space, cpArray *components, cpArray *rogueBodies, cpBody *a
 	} 
 	
 	// Add any rogue bodies (bodies not added to the space)
-	if(cpBodyIsRogue(a)) cpArrayPush(rogueBodies, a);
-	if(cpBodyIsRogue(b)) cpArrayPush(rogueBodies, b);
+	if(!a->space) cpArrayPush(rogueBodies, a);
+	if(!b->space) cpArrayPush(rogueBodies, b);
 	
 	componentNodeMerge(a_root, b_root);
 }
@@ -123,7 +122,7 @@ componentActive(cpBody *root, cpFloat threshold)
 	cpBody *body = root, *next;
 	do {
 		next = body->node.next;
-		if(body->node.idleTime < threshold) return cpTrue;
+		if(cpBodyIsRogue(body) || body->node.idleTime < threshold) return cpTrue;
 	} while((body = next) != root);
 	
 	return cpFalse;
@@ -175,7 +174,7 @@ cpSpaceProcessComponents(cpSpace *space, cpFloat dt)
 	// iterate graph edges and build forests
 	for(int i=0; i<arbiters->num; i++){
 		cpArbiter *arb = (cpArbiter*)arbiters->arr[i];
-		mergeBodies(space, components, rogueBodies, arb->a->body, arb->b->body);
+		mergeBodies(space, components, rogueBodies, arb->private_a->body, arb->private_b->body);
 	}
 	for(int j=0; j<constraints->num; j++){
 		cpConstraint *constraint = (cpConstraint *)constraints->arr[j];
@@ -223,21 +222,11 @@ cpSpaceProcessComponents(cpSpace *space, cpFloat dt)
 }
 
 void
-cpBodySleep(cpBody *body)
-{
-	cpBodySleepWithGroup(body, NULL);
-}
-
-void
-cpBodySleepWithGroup(cpBody *body, cpBody *group){
-	cpAssert(!cpBodyIsStatic(body) && !cpBodyIsRogue(body), "Rogue and static bodies cannot be put to sleep.");
-	
-	cpSpace *space = body->space;
-	cpAssert(space, "Cannot put a body to sleep that has not been added to a space.");
+cpSpaceSleepBody(cpSpace *space, cpBody *body){
 	cpAssert(!space->locked, "Bodies can not be put to sleep during a query or a call to cpSpaceSte(). Put these calls into a post-step callback.");
-	cpAssert(!group || cpBodyIsSleeping(group), "Cannot use a non-sleeping body as a group identifier.");
 	
-	if(cpBodyIsSleeping(body)) return;
+	cpComponentNode node = {NULL, body, 0, 0.0f};
+	body->node = node;
 	
 	for(cpShape *shape = body->shapesList; shape; shape = shape->next){
 		cpSpaceHashRemove(space->activeShapes, shape, shape->hashid);
@@ -246,39 +235,6 @@ cpBodySleepWithGroup(cpBody *body, cpBody *group){
 		cpSpaceHashInsert(space->staticShapes, shape, shape->hashid, shape->bb);
 	}
 	
-	if(group){
-		cpBody *root = componentNodeRoot(group);
-		
-		cpComponentNode node = {root, root->node.next, 0, 0.0f};
-		body->node = node;
-		root->node.next = body;
-	} else {
-		cpComponentNode node = {NULL, body, 0, 0.0f};
-		body->node = node;
-		
-		cpArrayPush(space->sleepingComponents, body);
-	}
-	
+	cpArrayPush(space->sleepingComponents, body);
 	cpArrayDeleteObj(space->bodies, body);
 }
-
-static void
-activateTouchingHelper(cpShape *shape, cpContactPointSet *points, cpArray **bodies){
-	if(*bodies == NULL) (*bodies) = cpArrayNew(0);
-	cpArrayPush(*bodies, shape->body);
-}
-
-void
-cpSpaceActivateShapesTouchingShape(cpSpace *space, cpShape *shape){
-	cpArray *bodies = NULL;
-	cpSpaceShapeQuery(space, shape, (cpSpaceShapeQueryFunc)activateTouchingHelper, &bodies);
-	
-	if(bodies){
-		for(int i=0; i<bodies->num; i++){
-			cpBody *body = (cpBody *)bodies->arr[i];
-			cpBodyActivate(body);
-		}
-	}
-}
-
-

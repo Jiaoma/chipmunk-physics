@@ -20,10 +20,10 @@
  */
  
 #include <stdlib.h>
-//#include <stdio.h>
+#include <stdio.h>
 #include <math.h>
 
-#include "chipmunk_private.h"
+#include "chipmunk.h"
 
 #pragma mark Post Step Callback Functions
 
@@ -69,7 +69,7 @@ typedef struct cpContactBuffer {
 static cpContactBufferHeader *
 cpSpaceAllocContactBuffer(cpSpace *space)
 {
-	cpContactBuffer *buffer = (cpContactBuffer *)cpmalloc(sizeof(cpContactBuffer));
+	cpContactBuffer *buffer = (cpContactBuffer *)malloc(sizeof(cpContactBuffer));
 	cpArrayPush(space->allocatedBuffers, buffer);
 	return (cpContactBufferHeader *)buffer;
 }
@@ -178,7 +178,7 @@ queryFunc(cpShape *a, cpShape *b, cpSpace *space)
 	cpShape *shape_pair[] = {a, b};
 	cpHashValue arbHashID = CP_HASH_PAIR((size_t)a, (size_t)b);
 	cpArbiter *arb = (cpArbiter *)cpHashSetInsert(space->contactSet, arbHashID, shape_pair, space);
-	cpArbiterUpdate(arb, contacts, numContacts, handler, a, b);
+	cpArbiterUpdate(arb, contacts, numContacts, handler, a, b); // retains the contacts array
 	
 	// Call the begin function first if it's the first step
 	if(arb->state == cpArbiterStateFirstColl && !handler->begin(arb, space, handler->data)){
@@ -221,8 +221,8 @@ static cpBool
 contactSetFilter(cpArbiter *arb, cpSpace *space)
 {
 	if(space->sleepTimeThreshold != INFINITY){
-		cpBody *a = arb->a->body;
-		cpBody *b = arb->b->body;
+		cpBody *a = arb->private_a->body;
+		cpBody *b = arb->private_b->body;
 		
 		// both bodies are either static or sleeping
 		cpBool sleepingNow =
