@@ -127,8 +127,6 @@ cpSpaceInit(cpSpace *space)
 	
 	space->bodies = cpArrayNew(0);
 	space->sleepingComponents = cpArrayNew(0);
-	space->rousedBodies = cpArrayNew(0);
-	
 	space->sleepTimeThreshold = INFINITY;
 	space->idleSpeedThreshold = 0.0f;
 	
@@ -165,7 +163,6 @@ cpSpaceDestroy(cpSpace *space)
 	
 	cpArrayFree(space->bodies);
 	cpArrayFree(space->sleepingComponents);
-	cpArrayFree(space->rousedBodies);
 	
 	cpArrayFree(space->constraints);
 	
@@ -301,7 +298,7 @@ cpShape *
 cpSpaceAddShape(cpSpace *space, cpShape *shape)
 {
 	cpBody *body = shape->body;
-	if(!body || cpBodyIsStatic(body)) return cpSpaceAddStaticShape(space, shape);
+	if(!body || body == &space->staticBody) return cpSpaceAddStaticShape(space, shape);
 	
 	cpAssert(!cpHashSetFind(space->activeShapes->handleSet, shape->hashid, shape),
 		"Cannot add the same shape more than once.");
@@ -475,25 +472,3 @@ cpSpaceRehashShape(cpSpace *space, cpShape *shape)
 	cpSpaceHashRehashObject(space->activeShapes, shape, shape->hashid);
 	cpSpaceHashRehashObject(space->staticShapes, shape, shape->hashid);
 }
-
-void
-cpSpaceEachBody(cpSpace *space, cpSpaceBodyIterator func, void *data)
-{
-	cpArray *bodies = space->bodies;
-	
-	for(int i=0; i<bodies->num; i++){
-		func((cpBody *)bodies->arr[i], data);
-	}
-	
-	cpArray *components = space->sleepingComponents;
-	for(int i=0; i<components->num; i++){
-		cpBody *root = components->arr[i];
-		cpBody *body = root, *next;
-		do {
-			next = body->node.next;
-			func(body, data);
-		} while((body = next) != root);
-	}
-}
-
-
