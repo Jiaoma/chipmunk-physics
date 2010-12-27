@@ -1,4 +1,4 @@
-Chipmunk has been used in quite a few commercial and non-commercial games released on a number of platforms. This is only the list of games that I've been told of or heard of through Google. I'm sure that there are many many more out there.
+Chipmunk has been used in quite a few commercial and non-commercial games released on a number of platforms. This is only the small list of games that I've been told of or heard of through Google. I'm sure that there are many many more out there.
 
 ==PC/Mac/Linux==
 
@@ -37,6 +37,7 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://www.4iphone4.me/BallDizzy/ Ball Dizzy] - Pool-like arcade game.
  * [http://www.4iphone4.me/AirportMadness/ Airport Madness] - Arcade balancing game.
  * [http://seraphimsscepter.com/ Seraphim's Scepter] - Polished looking breakout clone.
- * Chipmunk is included with the [http://code.google.com/p/cocos2d-iphone/ Cocos 2D] game engine, so I'm sure there are a lot of iPhone games out there using it!
+ * [http://www.tastybits.se/ Happy Words]
+ * Chipmunk is included with the [http://code.google.com/p/cocos2d-iphone/ Cocos 2D] game engine, so there are a lot of game out there using it that I don't even know about.
 
 If you have a project that uses the Chipmunk physics library, send me an email and I'll add it to the list. I know that there are a lot missing.
