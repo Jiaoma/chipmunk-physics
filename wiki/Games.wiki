@@ -8,7 +8,11 @@ Chipmunk has been used in quite a few commercial and non-commercial games releas
  * [http://xmoto.tuxfamily.org/ XMoto] - While the core of the game uses ODE, the next version will use Chipmunk to simulate boxes and other items to interact with. (PC/Mac/Linux)
  * [http://nuclearnova.com/liquiddefense.php Liquid Defense] - Somewhat similar to Enigmo or Incredible Machine. (Mac only)
  * [http://www.zanydoodle.com/ Zany Doodle] - A physics sandbox game similar to Crayon Physics. [http://www.youtube.com/results?search_query=zany+doodle&search_type=&aq=f YouTube videos]
- * [http://www.gnadegames.com/toygame.php The Magic Toy Chest] - Physics based puzzle game. Looks a lot like The Incredible Machine. (PC only)
+ * [http://graduategames.com/magictoychest/ The Magic Toy Chest] - Physics based puzzle game. Looks a lot like The Incredible Machine. (PC only)
+ * [http://nifflas.ni2.se/?page=NightSky NightSky] - Roll a ball through beautiful artistic levels. 
+
+== Wii ==
+ * [http://www.nintendo.com/games/detail/Kx4tViAej3p3EvbNktcO5tNEr13MlvZy Mouse House] - Block pushing puzzle game. (also on iPhone / Mac / PC)
 
 ==PSP/DS Homebrew==
  * [http://www.dcemu.co.uk/vbulletin/showthread.php?t=116067 Stakker] - Make towers and then knock them over for points. (PSP)
