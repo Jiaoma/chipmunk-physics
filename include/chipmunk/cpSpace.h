@@ -42,8 +42,6 @@ typedef struct cpCollisionHandler {
 	void *data;
 } cpCollisionHandler;
 
-extern cpCollisionHandler cpSpaceDefaultHandler;
-
 typedef struct cpContactBufferHeader {
 	cpTimestamp stamp;
 	struct cpContactBufferHeader *next;

@@ -29,7 +29,7 @@ typedef struct cpPolyShapeAxis{
 
 // Convex polygon shape structure.
 typedef struct cpPolyShape{
-	cpShape shape;
+	CP_PRIVATE(cpShape shape);
 	
 	// Vertex and axis lists.
 	CP_PRIVATE(int numVerts);

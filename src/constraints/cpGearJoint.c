@@ -80,7 +80,7 @@ CP_DefineClassGetter(cpGearJoint)
 cpGearJoint *
 cpGearJointAlloc(void)
 {
-	return (cpGearJoint *)cpcalloc(1, sizeof(cpGearJoint));
+	return (cpGearJoint *)cpmalloc(sizeof(cpGearJoint));
 }
 
 cpGearJoint *

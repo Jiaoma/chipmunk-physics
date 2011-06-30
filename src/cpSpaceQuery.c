@@ -201,7 +201,7 @@ shapeQueryHelper(cpShape *a, cpShape *b, shapeQueryContext *context)
 	if(
 		(a->group && a->group == b->group) ||
 		!(a->layers & b->layers) ||
-		a == b
+		a->sensor || b->sensor
 	) return;
 	
 	cpContact contacts[CP_MAX_CONTACTS_PER_ARBITER];

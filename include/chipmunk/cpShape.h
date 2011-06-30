@@ -114,7 +114,7 @@ cpBool cpShapePointQuery(cpShape *shape, cpVect p);
 
 // Circle shape structure.
 typedef struct cpCircleShape{
-	cpShape shape;
+	CP_PRIVATE(cpShape shape);
 	
 	// Center in body space coordinates
 	CP_PRIVATE(cpVect c);
@@ -135,7 +135,7 @@ CP_DeclareShapeGetter(cpCircleShape, cpFloat, Radius);
 
 // Segment shape structure.
 typedef struct cpSegmentShape{
-	cpShape shape;
+	CP_PRIVATE(cpShape shape);
 	
 	// Endpoints and normal of the segment. (body space coordinates)
 	cpVect CP_PRIVATE(a), CP_PRIVATE(b), CP_PRIVATE(n);

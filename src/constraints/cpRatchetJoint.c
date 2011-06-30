@@ -101,7 +101,7 @@ CP_DefineClassGetter(cpRatchetJoint)
 cpRatchetJoint *
 cpRatchetJointAlloc(void)
 {
-	return (cpRatchetJoint *)cpcalloc(1, sizeof(cpRatchetJoint));
+	return (cpRatchetJoint *)cpmalloc(sizeof(cpRatchetJoint));
 }
 
 cpRatchetJoint *
