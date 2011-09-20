@@ -1,12 +1,1 @@
-=THE DOCUMENTATION HAS MOVED!=
-
-You can find the latest documentation online [http://files.slembcke.net/chipmunk/release/ChipmunkLatest-Docs/ here].
-
-=Other Links=
-
- * [http://www.slembcke.net/forums/viewforum.php?f=1 Official Chipmunk Forums]
- * [Games] - A list of some games make with Chipmunk
- * [BindingsAndPorts] - A list of bindings and ports of Chipmunk to other languages.
- * [http://howlingmoonsoftware.com/index.php Our Company's Website]
- * [http://howlingmoonsoftware.com/objectiveChipmunk.php Objective-Chipmunk] 
- * [http://howlingmoonsoftware.com/contracting.php Contract with Us]
+Moved to: http://chipmunk-physics.net/release/ChipmunkLatest-Docs/
